@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check Eligibility - cgsp</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
+  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
+  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
+</div>
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-drawer">
+
+    <!-- Header -->
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="logo-text">🏛️ CGSP</div>
+        <div class="logo-sub">Centralized Government Schemes Portal</div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="mobile-lang-bar">
+      <span>🌐 Language / భాష / भाषा</span>
+      <button class="mobile-lang-btn active" 
+        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mobile-drawer-links">
+      <a href="index.html">
+        <span class="link-icon">🏠</span>
+        <span data-lang="nav_home">Home</span>
+      </a>
+      <a href="schemes.html">
+        <span class="link-icon">📋</span>
+        <span data-lang="nav_schemes">Schemes</span>
+      </a>
+      <a href="eligibility.html">
+        <span class="link-icon">✅</span>
+        <span data-lang="nav_eligibility">Eligibility Check</span>
+      </a>
+      <a href="about.html">
+        <span class="link-icon">ℹ️</span>
+        <span data-lang="nav_about">About Us</span>
+      </a>
+      <a href="contact.html">
+        <span class="link-icon">📞</span>
+        <span data-lang="nav_contact">Contact</span>
+      </a>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="mobile-drawer-footer">
+      <a href="admin-login.html" class="mobile-admin-btn">
+        🔐 Admin Login
+      </a>
+    </div>
+
+  </div>
+</div>
+<nav>
+  <div class="nav-logo"><span>🏛️</span><div><div style="font-weight:700;color:#1a3c6e">cgsp</div></div></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="schemes.html">Schemes</a></li>
+    <li><a href="eligibility.html" class="active">Eligibility Check</a></li>
+    <li><a href="admin-dashboard.html">Dashboard</a></li>
+    <li><a href="about.html">About us</a></li>
+    <li><a href="contact.html">contact</a></li>
+  </ul>
+  <button class="hamburger" onclick="openMenu()" id="hamburger-btn">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<a href="admin-login.html" class="btn-admin">Admin Login</a>
+</nav>
+
+<div class="eligibility-page">
+  <h1 data-lang="elig_title">Check Your Eligibility</h1>
+  <p style="color:#666;margin-bottom:20px" data-lang="elig_subtitle">Fill in your details to find schemes you are eligible for.</p>
+
+  <div class="section-title">Select Category (Required)</div>
+  <div class="cat-select-grid">
+    <div class="cat-select-card" onclick="selectCat('Student',this)">
+      <div class="icon">🎓</div>
+      <strong>Student</strong>
+      <p style="font-size:0.78rem;color:#666;margin-top:4px">For students & education related schemes</p>
+    </div>
+    <div class="cat-select-card" onclick="selectCat('Agriculture',this)">
+      <div class="icon">🌱</div>
+      <strong>Agriculture</strong>
+      <p style="font-size:0.78rem;color:#666;margin-top:4px">For farmers & agriculture related schemes</p>
+    </div>
+    <div class="cat-select-card" onclick="selectCat('Physically Challenged',this)">
+      <div class="icon">♿</div>
+      <strong>Physically Challenged</strong>
+      <p style="font-size:0.78rem;color:#666;margin-top:4px">For divyanjan welfare & empowerment schemes</p>
+    </div>
+    <div class="cat-select-card" onclick="selectCat('Health & Wellness',this)">
+      <div class="icon">❤️</div>
+      <strong>Health & Wellness</strong>
+      <p style="font-size:0.78rem;color:#666;margin-top:4px">For health, nutrition & wellness schemes</p>
+    </div>
+  </div>
+
+  <div class="section-title">Personal Information</div>
+  <div class="form-row">
+    <div class="form-group"><label data-lang="elig_name">Full Name</label><input type="text" id="full-name" placeholder="Enter your full name"></div>
+    <div class="form-group"><label data-lang="elig_age">Age</label><input type="number" id="age" placeholder="Enter your age"></div>
+    <div class="form-group"><label data-lang="elig_gender">Gender</label>
+      <select id="gender"><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label >Mobile Number</label><input type="tel" id="mobile" placeholder="Enter mobile number"></div>
+    <div class="form-group"><label data-lang="elig_state">State</label>
+      <select id="state"><option value="">Select state</option><option>andhra pradesh</option><option>Delhi</option><option>Karnataka</option><option>Tamil Nadu</option><option>Gujarat</option><option>Rajasthan</option><option>Uttar Pradesh</option><option>West Bengal</option></select>
+    </div>
+    <div class="form-group"><label data-lang="elig_district">District</label><input type="text" id="district" placeholder="Enter district"></div>
+  </div>
+
+  <div class="section-title">Financial Information</div>
+  <div class="form-row">
+    <div class="form-group"><label data-lang="elig_income">Annual Family Income (₹)</label>
+      <select id="annual-income"><option value="">Select income range</option><option value="below1">Below ₹1 Lakh</option><option value="1to2.5">₹1L - ₹2.5L</option><option value="2.5to5">₹2.5L - ₹5L</option><option value="above5">Above ₹5L</option></select>
+    </div>
+    <div class="form-group"><label data-lang="elig_category">Category</label>
+      <select id="caste"><option value="">Select category</option><option>General</option><option>OBC</option><option>SC</option><option>ST</option></select>
+    </div>
+    <div class="form-group"><label data-lang="elig_occupation">Occupation</label>
+      <select id="occupation"><option value="">Select occupation</option><option>Student</option><option>Farmer</option><option>Self-employed</option><option>Unemployed</option></select>
+    </div>
+  </div>
+
+  <div class="section-title">Additional Information (As per Category)</div>
+  <div class="form-row">
+    <div class="form-group"><label>Course/Stream (if student)</label>
+      <select id="course"><option value="">Select course</option><option>Engineering</option><option>Medical</option><option>Arts</option><option>Commerce</option><option>Science</option></select>
+    </div>
+    <div class="form-group"><label>Land Holding (if agriculture)</label>
+      <select id="land"><option value="">Select land holding</option><option>Below 1 acre</option><option>1-5 acres</option><option>Above 5 acres</option></select>
+    </div>
+    <div class="form-group"><label>Disability Type (if applicable)</label>
+      <select id="disability"><option value="">Select type of disability</option><option>Visual</option><option>Hearing</option><option>Physical</option><option>Intellectual</option></select>
+    </div>
+  </div>
+
+  <div class="eligibility-actions">
+    <button class="btn-primary" onclick="checkEligibility()" data-lang="elig_check_btn">Check Eligibility</button>
+    <button class="btn-outline" onclick="resetForm()" data-lang="elig_reset">Reset</button>
+  </div>
+  <p style="font-size:0.8rem;color:#888;margin-top:16px">🔒 Note: The information provided will be used only to find relevant schemes for you.</p>
+</div>
+
+<script src="js/eligibility.js"></script>
+<script src="js/language.js"></script>
+<script>
+  window.addEventListener('load', initLanguage);
+</script>
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const ham = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+
+  // Animate hamburger
+  const spans = ham.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+}
+
+// Close menu when link clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+<script>
+// ===== MOBILE MENU =====
+function openMenu() {
+  document.getElementById('mobile-menu').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateMobileLang(lang) {
+  document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  closeMenu();
+}
+
+// Close menu on link click
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+// Mark active page in mobile menu
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage) {
+    link.style.background = '#eff4ff';
+    link.style.color = '#2563eb';
+    link.style.fontWeight = '700';
+  }
+});
+</script>
+</body>
+</html>

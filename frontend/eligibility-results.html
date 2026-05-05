@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eligibility Results - cgsp</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
+  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
+  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
+</div>
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-drawer">
+
+    <!-- Header -->
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="logo-text">🏛️ CGSP</div>
+        <div class="logo-sub">Centralized Government Schemes Portal</div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="mobile-lang-bar">
+      <span>🌐 Language / భాష / भाषा</span>
+      <button class="mobile-lang-btn active" 
+        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mobile-drawer-links">
+      <a href="index.html">
+        <span class="link-icon">🏠</span>
+        <span data-lang="nav_home">Home</span>
+      </a>
+      <a href="schemes.html">
+        <span class="link-icon">📋</span>
+        <span data-lang="nav_schemes">Schemes</span>
+      </a>
+      <a href="eligibility.html">
+        <span class="link-icon">✅</span>
+        <span data-lang="nav_eligibility">Eligibility Check</span>
+      </a>
+      <a href="about.html">
+        <span class="link-icon">ℹ️</span>
+        <span data-lang="nav_about">About Us</span>
+      </a>
+      <a href="contact.html">
+        <span class="link-icon">📞</span>
+        <span data-lang="nav_contact">Contact</span>
+      </a>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="mobile-drawer-footer">
+      <a href="admin-login.html" class="mobile-admin-btn">
+        🔐 Admin Login
+      </a>
+    </div>
+
+  </div>
+</div>
+<nav>
+  <div class="nav-logo"><span>🏛️</span><div><div style="font-weight:700;color:#1a3c6e">cgsp</div></div></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="schemes.html">Schemes</a></li>
+    <li><a href="eligibility.html" class="active">Eligibility Check</a></li>
+    <li><a href="admin-dashboard.html">Dashboard</a></li>
+    <li><a href="about.html">About us</a></li>
+    <li><a href="contact.html">contact</a></li>
+  </ul>
+<button class="hamburger" onclick="openMenu()" id="hamburger-btn">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<a href="admin-login.html" class="btn-admin">Admin Login</a>
+</nav>
+<div class="results-page">
+  <div class="success-banner" id="banner">✅ <span id="result-count">Loading results...</span></div>
+  <div id="results-list"></div>
+  <p style="font-size:0.8rem;color:#888;margin-top:20px">🔒 Note: Eligibility is based on the information provided. Please check official guidelines before applying.</p>
+</div>
+<script>
+const badgeClass = { 'Student':'badge-student', 'Agriculture':'badge-agriculture', 'Physically Challenged':'badge-disabled', 'Health & Wellness':'badge-health' };
+window.onload = () => {
+  const data = JSON.parse(localStorage.getItem('eligibilityResults') || '{}');
+  const schemes = data.eligible || [];
+  document.getElementById('result-count').textContent = `Great! You are eligible for ${schemes.length} scheme(s) based on the information you provided.`;
+  const list = document.getElementById('results-list');
+  if (!schemes.length) { list.innerHTML = '<p>No schemes found matching your criteria.</p>'; return; }
+  list.innerHTML = schemes.map(s => `
+    <div class="result-card">
+      <div class="result-card-left">
+        <h3>${s.title} <span class="badge ${badgeClass[s.category] || ''}" style="font-size:0.75rem">${s.category}</span></h3>
+        <p>${s.description?.substring(0, 100)}...</p>
+      </div>
+      <div class="result-card-right">
+        <div class="amount">${s.benefit_amount || 'Variable'}</div>
+        <a href="scheme-detail.html?id=${s.id}">View Details →</a>
+      </div>
+    </div>
+  `).join('');
+};
+</script>
+<script src="js/language.js"></script>
+<script>window.addEventListener('load', initLanguage);</script>
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const ham = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+
+  // Animate hamburger
+  const spans = ham.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+}
+
+// Close menu when link clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+<script>
+// ===== MOBILE MENU =====
+function openMenu() {
+  document.getElementById('mobile-menu').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateMobileLang(lang) {
+  document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  closeMenu();
+}
+
+// Close menu on link click
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+// Mark active page in mobile menu
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage) {
+    link.style.background = '#eff4ff';
+    link.style.color = '#2563eb';
+    link.style.fontWeight = '700';
+  }
+});
+</script>
+</body>
+</html>

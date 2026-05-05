@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - cgsp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'DM Sans',sans-serif; background:#f5f8ff; color:#1e293b; }
+
+    nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 48px; height:64px; background:#fff;
+      border-bottom:1.5px solid #e1e8f5; position:sticky; top:0; z-index:200;
+    }
+    .nav-brand { display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .nav-icon { width:36px; height:36px; background:#0f2557; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .nav-links { display:flex; gap:6px; list-style:none; }
+    .nav-links a { padding:6px 13px; border-radius:7px; font-size:0.88rem; color:#64748b; text-decoration:none; font-weight:500; transition:all 0.18s; }
+    .nav-links a:hover, .nav-links a.active { color:#2563eb; background:#eff4ff; }
+    .btn-admin { background:#0f2557; color:#fff; padding:8px 22px; border-radius:8px; font-size:0.88rem; font-weight:600; text-decoration:none; }
+
+    /* HERO */
+    .contact-hero {
+      background:linear-gradient(135deg,#0f2557 0%,#1a3c8f 60%,#2563eb 100%);
+      padding:60px 80px; text-align:center; color:#fff;
+    }
+    .contact-hero h1 { font-family:'Sora',sans-serif; font-size:2.4rem; font-weight:800; margin-bottom:12px; }
+    .contact-hero h1 span { color:#93c5fd; }
+    .contact-hero p { font-size:1rem; opacity:0.85; max-width:500px; margin:0 auto; line-height:1.75; }
+
+    /* CONTACT SECTION */
+    .contact-section { padding:60px 80px; }
+    .section-title { text-align:center; margin-bottom:40px; }
+    .section-title h2 { font-family:'Sora',sans-serif; font-size:1.8rem; color:#0f2557; font-weight:800; margin-bottom:8px; }
+    .section-title p { color:#64748b; font-size:0.95rem; }
+
+    .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:30px; max-width:900px; margin:0 auto; }
+
+    /* CONTACT CARDS */
+    .contact-card {
+      background:#fff; border-radius:16px; padding:32px 28px;
+      border:1.5px solid #e1e8f5; transition:all 0.22s;
+    }
+    .contact-card:hover { box-shadow:0 8px 30px rgba(15,37,87,0.10); transform:translateY(-4px); }
+    .contact-card .c-icon {
+      width:56px; height:56px; border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.6rem; margin-bottom:16px;
+    }
+    .contact-card h3 { font-family:'Sora',sans-serif; font-size:1.05rem; color:#0f2557; font-weight:700; margin-bottom:8px; }
+    .contact-card p { font-size:0.88rem; color:#64748b; line-height:1.7; margin-bottom:14px; }
+    .contact-card a {
+      font-size:0.95rem; font-weight:700; text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+    }
+
+    /* TEAM CONTACT */
+    .team-contact-section { padding:0 80px 60px; }
+    .team-contact-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; max-width:900px; margin:0 auto; }
+    .team-contact-card {
+      background:#fff; border-radius:14px; padding:24px 20px;
+      border:1.5px solid #e1e8f5; text-align:center; transition:all 0.22s;
+    }
+    .team-contact-card:hover { box-shadow:0 6px 24px rgba(15,37,87,0.10); border-color:#2563eb; }
+    .tc-avatar {
+      width:60px; height:60px; border-radius:50%;
+      background:linear-gradient(135deg,#0f2557,#2563eb);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.4rem; margin:0 auto 12px; color:#fff;
+      font-family:'Sora',sans-serif; font-weight:800;
+    }
+    .team-contact-card h3 { font-family:'Sora',sans-serif; font-size:0.97rem; color:#0f2557; font-weight:700; margin-bottom:4px; }
+    .team-contact-card .role { font-size:0.78rem; color:#2563eb; font-weight:600; margin-bottom:14px; }
+    .linkedin-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      background:#0077b5; color:#fff; padding:8px 16px;
+      border-radius:8px; text-decoration:none; font-size:0.82rem;
+      font-weight:600; transition:all 0.18s; width:100%; justify-content:center;
+    }
+    .linkedin-btn:hover { background:#005885; }
+
+    /* MAP / ADDRESS */
+    .info-section { padding:0 80px 60px; }
+    .info-box {
+      background:#fff; border-radius:16px; padding:36px 40px;
+      border:1.5px solid #e1e8f5; max-width:900px; margin:0 auto;
+      display:grid; grid-template-columns:1fr 1fr; gap:30px;
+    }
+    .info-item h4 { font-family:'Sora',sans-serif; font-size:0.95rem; color:#0f2557; font-weight:700; margin-bottom:8px; }
+    .info-item p { font-size:0.88rem; color:#64748b; line-height:1.7; }
+    .info-item a { color:#2563eb; text-decoration:none; font-weight:600; }
+
+    footer { background:#0f2557; color:rgba(255,255,255,0.7); text-align:center; padding:20px; font-size:0.88rem; }
+    footer a { color:#93c5fd; text-decoration:none; }
+  </style>
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+<div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
+  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
+  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
+</div>
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-drawer">
+
+    <!-- Header -->
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="logo-text">🏛️ CGSP</div>
+        <div class="logo-sub">Centralized Government Schemes Portal</div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="mobile-lang-bar">
+      <span>🌐 Language / భాష / भाषा</span>
+      <button class="mobile-lang-btn active" 
+        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mobile-drawer-links">
+      <a href="index.html">
+        <span class="link-icon">🏠</span>
+        <span data-lang="nav_home">Home</span>
+      </a>
+      <a href="schemes.html">
+        <span class="link-icon">📋</span>
+        <span data-lang="nav_schemes">Schemes</span>
+      </a>
+      <a href="eligibility.html">
+        <span class="link-icon">✅</span>
+        <span data-lang="nav_eligibility">Eligibility Check</span>
+      </a>
+      <a href="about.html">
+        <span class="link-icon">ℹ️</span>
+        <span data-lang="nav_about">About Us</span>
+      </a>
+      <a href="contact.html">
+        <span class="link-icon">📞</span>
+        <span data-lang="nav_contact">Contact</span>
+      </a>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="mobile-drawer-footer">
+      <a href="admin-login.html" class="mobile-admin-btn">
+        🔐 Admin Login
+      </a>
+    </div>
+
+  </div>
+</div>
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="location.href='index.html'">
+    <div class="nav-icon">🏛️</div>
+    <div>
+      <div style="font-family:Sora,sans-serif;font-weight:700;color:#0f2557;font-size:0.95rem">cgsp</div>
+      <div style="font-size:0.68rem;color:#888">centralized government schemes portal</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="schemes.html">Schemes</a></li>
+    <li><a href="eligibility.html">Eligibility Check</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+  </ul>
+ <button class="hamburger" onclick="openMenu()" id="hamburger-btn">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<a href="admin-login.html" class="btn-admin">Admin Login</a>
+</nav>
+
+<!-- HERO -->
+<div class="contact-hero">
+  <h1>Contact <span>Us</span></h1>
+  <p>Have questions about government schemes? We're here to help you find the right information.</p>
+</div>
+
+<!-- CONTACT CARDS -->
+<div class="contact-section">
+  <div class="section-title">
+    <h2>Get In Touch</h2>
+    <p>Reach out to us through any of these channels</p>
+  </div>
+  <div class="contact-grid">
+
+    <div class="contact-card">
+      <div class="c-icon" style="background:#dcfce7">📱</div>
+      <h3>Phone / WhatsApp</h3>
+      <p>Call or WhatsApp us for quick help regarding any government scheme or portal related queries.</p>
+      <a href="tel:+919014300335" style="color:#16a34a">
+        📞 +91 90143 00335
+      </a><br><br>
+      <a href="https://wa.me/919014300335" target="_blank"
+        style="display:inline-flex;align-items:center;gap:8px;background:#25d366;color:#fff;padding:10px 20px;border-radius:9px;font-size:0.88rem;font-weight:600;text-decoration:none;margin-top:4px">
+        <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        WhatsApp Us
+      </a>
+    </div>
+
+    <div class="contact-card">
+      <div class="c-icon" style="background:#dbeafe">📧</div>
+      <h3>Email Support</h3>
+      <p>Send us an email for detailed queries about schemes, eligibility, or technical issues with the portal.</p>
+      <a href="mailto:cgsp.portal@gmail.com" style="color:#2563eb">
+        ✉️ cgsp.portal@gmail.com
+      </a><br><br>
+      <p style="font-size:0.82rem;color:#94a3b8;margin-top:8px">We typically respond within 24 hours.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- TEAM CONTACT -->
+<div class="team-contact-section">
+  <div class="section-title">
+    <h2>Developed By</h2>
+    <p>Connect with our team members directly</p>
+  </div>
+  <div class="team-contact-grid">
+
+    <div class="team-contact-card">
+      <div class="tc-avatar">H</div>
+      <h3>M. Harshitha</h3>
+      <div class="role">Developer</div>
+      <a href="https://www.linkedin.com/in/harshitha-motu-614300339" target="_blank" class="linkedin-btn">
+        <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn Profile
+      </a>
+    </div>
+
+    <div class="team-contact-card">
+      <div class="tc-avatar">S</div>
+      <h3>S. Santhosh</h3>
+      <div class="role">Developer</div>
+      <a href="https://www.linkedin.com/in/santhoshsivamurugan" target="_blank" class="linkedin-btn">
+        <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn Profile
+      </a>
+    </div>
+
+    <div class="team-contact-card">
+      <div class="tc-avatar">A</div>
+      <h3>S. Akhila</h3>
+      <div class="role">Developer</div>
+      <a href="https://www.linkedin.com/in/akhila-selvam-6b05b9377" target="_blank" class="linkedin-btn">
+        <svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn Profile
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- INFO -->
+<div class="info-section">
+  <div class="info-box">
+    <div class="info-item">
+      <h4>📍 About This Project</h4>
+      <p>cgsp Portal is an academic project developed to help Indian citizens easily find and access government welfare schemes across Education, Agriculture, Health and Disability categories.</p>
+    </div>
+    <div class="info-item">
+      <h4>⏰ Support Hours</h4>
+      <p>Available online 24/7<br>
+      Phone support: 9 AM – 6 PM<br>
+      WhatsApp: <a href="https://wa.me/919014300335">+91 90143 00335</a><br>
+      Response time: Within 24 hours</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2024 cgsp - centralized government schemes portal &nbsp;|&nbsp; Developed by
+    <a href="https://www.linkedin.com/in/harshitha-motu-614300339" target="_blank">M. Harshitha</a>,
+    <a href="https://www.linkedin.com/in/santhoshsivamurugan" target="_blank">S. Santhosh</a>,
+    <a href="https://www.linkedin.com/in/akhila-selvam-6b05b9377" target="_blank">S. Akhila</a>
+  </p>
+</footer>
+<script src="js/language.js"></script>
+<script>window.addEventListener('load', initLanguage);</script>
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const ham = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+
+  // Animate hamburger
+  const spans = ham.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+}
+
+// Close menu when link clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+<script>
+// ===== MOBILE MENU =====
+function openMenu() {
+  document.getElementById('mobile-menu').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateMobileLang(lang) {
+  document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  closeMenu();
+}
+
+// Close menu on link click
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+// Mark active page in mobile menu
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage) {
+    link.style.background = '#eff4ff';
+    link.style.color = '#2563eb';
+    link.style.fontWeight = '700';
+  }
+});
+</script>
+</body>
+</html>

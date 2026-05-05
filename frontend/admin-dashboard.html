@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - cgsp</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background:#f5f8ff; }
+    .admin-layout { display:flex; min-height:100vh; }
+    .admin-sidebar {
+      width:240px; background:#0f2557; color:#fff;
+      padding:0; flex-shrink:0; position:fixed;
+      height:100vh; overflow-y:auto;
+    }
+    .sidebar-logo {
+      padding:24px 20px; border-bottom:1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-logo h2 { font-size:1.1rem; font-weight:800; }
+    .sidebar-logo p { font-size:0.72rem; opacity:0.6; margin-top:2px; }
+    .admin-badge-side {
+      background:#f59e0b; color:#000;
+      font-size:0.65rem; font-weight:700;
+      padding:2px 8px; border-radius:10px;
+      display:inline-block; margin-top:6px;
+    }
+    .sidebar-nav { padding:16px 0; }
+    .sidebar-nav a {
+      display:flex; align-items:center; gap:10px;
+      padding:12px 22px; color:rgba(255,255,255,0.7);
+      text-decoration:none; font-size:0.9rem;
+      cursor:pointer; transition:all 0.18s; font-weight:500;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background:rgba(255,255,255,0.1); color:#fff;
+      border-left:3px solid #60a5fa;
+    }
+    .admin-main {
+      margin-left:240px; flex:1; padding:32px 36px;
+    }
+    .admin-topbar {
+      display:flex; justify-content:space-between;
+      align-items:center; margin-bottom:28px;
+    }
+    .admin-topbar h1 { font-size:1.5rem; color:#0f2557; font-weight:800; }
+    .admin-topbar span { font-size:0.88rem; color:#64748b; }
+    .stat-cards {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      gap:18px; margin-bottom:28px;
+    }
+    .stat-card {
+      background:#fff; border-radius:12px; padding:22px;
+      border:1.5px solid #e1e8f5; text-align:center;
+    }
+    .stat-card .num { font-size:2.2rem; font-weight:800; font-family:'Sora',sans-serif; }
+    .stat-card .lbl { font-size:0.82rem; color:#64748b; margin-top:4px; }
+    .section-card {
+      background:#fff; border-radius:12px; padding:24px;
+      border:1.5px solid #e1e8f5; margin-bottom:24px;
+    }
+    .section-card h2 {
+      font-size:1.1rem; color:#0f2557; font-weight:700;
+      margin-bottom:20px; padding-bottom:12px;
+      border-bottom:1.5px solid #e1e8f5;
+    }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-group { display:flex; flex-direction:column; gap:5px; }
+    .form-group label { font-size:0.82rem; font-weight:600; color:#64748b; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding:10px 13px; border:1.5px solid #e1e8f5;
+      border-radius:8px; font-size:0.88rem;
+      font-family:'DM Sans',sans-serif; color:#1e293b;
+      transition:border-color 0.18s;
+    }
+    .form-group input:focus, .form-group select:focus,
+    .form-group textarea:focus {
+      outline:none; border-color:#2563eb;
+    }
+    .form-group textarea { resize:vertical; min-height:80px; }
+    .form-full { grid-column:1/-1; }
+    .btn-success {
+      background:#16a34a; color:#fff; padding:11px 24px;
+      border-radius:8px; border:none; cursor:pointer;
+      font-size:0.9rem; font-weight:600;
+      font-family:'Sora',sans-serif; transition:all 0.18s;
+    }
+    .btn-success:hover { background:#15803d; }
+    .btn-danger {
+      background:#dc2626; color:#fff; padding:7px 14px;
+      border-radius:7px; border:none; cursor:pointer;
+      font-size:0.82rem; font-weight:600; transition:all 0.18s;
+    }
+    .btn-danger:hover { background:#b91c1c; }
+    .btn-edit {
+      background:#2563eb; color:#fff; padding:7px 14px;
+      border-radius:7px; border:none; cursor:pointer;
+      font-size:0.82rem; font-weight:600; transition:all 0.18s;
+      margin-right:6px;
+    }
+    .btn-edit:hover { background:#1d4ed8; }
+    table { width:100%; border-collapse:collapse; }
+    th {
+      background:#f5f8ff; padding:12px 14px;
+      text-align:left; font-size:0.82rem;
+      font-weight:700; color:#64748b;
+      border-bottom:1.5px solid #e1e8f5;
+    }
+    td {
+      padding:12px 14px; font-size:0.88rem;
+      border-bottom:1px solid #f0f4ff; color:#1e293b;
+    }
+    tr:hover td { background:#f8faff; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:0.72rem; font-weight:700; }
+    .badge-s { background:#dbeafe; color:#1d4ed8; }
+    .badge-a { background:#dcfce7; color:#15803d; }
+    .badge-d { background:#ede9fe; color:#7c3aed; }
+    .badge-h { background:#fee2e2; color:#b91c1c; }
+    .badge-active { background:#dcfce7; color:#15803d; }
+    .badge-inactive { background:#fee2e2; color:#b91c1c; }
+    .msg { padding:10px 14px; border-radius:8px; margin-bottom:14px; font-size:0.88rem; display:none; }
+    .msg.success { background:#dcfce7; color:#166534; }
+    .msg.error { background:#fee2e2; color:#b91c1c; }
+    .search-bar { padding:9px 14px; border:1.5px solid #e1e8f5; border-radius:8px; width:260px; font-size:0.88rem; margin-bottom:16px; }
+    .page-section { display:none; }
+    .page-section.active { display:block; }
+    .logout-btn {
+      position:absolute; bottom:20px; left:0; right:0;
+      text-align:center;
+    }
+    .logout-btn a {
+      color:rgba(255,255,255,0.6); font-size:0.88rem;
+      cursor:pointer; padding:10px 22px;
+    }
+    .logout-btn a:hover { color:#fff; }
+  </style>
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-drawer">
+
+    <!-- Header -->
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="logo-text">🏛️ CGSP</div>
+        <div class="logo-sub">Centralized Government Schemes Portal</div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="mobile-lang-bar">
+      <span>🌐 Language / భాష / भाषा</span>
+      <button class="mobile-lang-btn active" 
+        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mobile-drawer-links">
+      <a href="index.html">
+        <span class="link-icon">🏠</span>
+        <span data-lang="nav_home">Home</span>
+      </a>
+      <a href="schemes.html">
+        <span class="link-icon">📋</span>
+        <span data-lang="nav_schemes">Schemes</span>
+      </a>
+      <a href="eligibility.html">
+        <span class="link-icon">✅</span>
+        <span data-lang="nav_eligibility">Eligibility Check</span>
+      </a>
+      <a href="about.html">
+        <span class="link-icon">ℹ️</span>
+        <span data-lang="nav_about">About Us</span>
+      </a>
+      <a href="contact.html">
+        <span class="link-icon">📞</span>
+        <span data-lang="nav_contact">Contact</span>
+      </a>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="mobile-drawer-footer">
+      <a href="admin-login.html" class="mobile-admin-btn">
+        🔐 Admin Login
+      </a>
+    </div>
+
+  </div>
+</div>
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar">
+    <div class="sidebar-logo">
+      <h2>🏛️ cgsp Admin</h2>
+      <p>centralized Government Scheme Portal</p>
+      <div class="admin-badge-side">ADMIN PANEL</div>
+    </div>
+    <div class="sidebar-nav">
+      <a class="active" onclick="showSection('dashboard',this)">📊 Dashboard</a>
+      <a onclick="showSection('add-scheme',this)">➕ Add New Scheme</a>
+      <a onclick="showSection('manage-schemes',this)">📋 Manage Schemes</a>
+      <a onclick="showSection('categories',this)">🗂️ By Category</a>
+    </div>
+    <div class="logout-btn">
+      <a onclick="adminLogout()">🚪 Logout</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <h1 id="page-title">Dashboard</h1>
+      <span id="admin-name">👤 Admin</span>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div class="page-section active" id="sec-dashboard">
+      <div class="stat-cards">
+        <div class="stat-card">
+          <div class="num" style="color:#2563eb" id="stat-total">-</div>
+          <div class="lbl">Total Schemes</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" style="color:#16a34a" id="stat-active">-</div>
+          <div class="lbl">Active Schemes</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" style="color:#7c3aed" id="stat-student">-</div>
+          <div class="lbl">Student Schemes</div>
+        </div>
+        <div class="stat-card">
+          <div class="num" style="color:#d97706" id="stat-health">-</div>
+          <div class="lbl">Health Schemes</div>
+        </div>
+      </div>
+      <div class="section-card">
+        <h2>📊 Schemes by Category</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px" class="dash-cat-grid">
+          <div style="background:#eff6ff;border-radius:10px;padding:18px;text-align:center">
+            <div style="font-size:1.8rem">🎓</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#1d4ed8" id="cat-student">-</div>
+            <div style="font-size:0.85rem;color:#64748b">Student</div>
+          </div>
+          <div style="background:#f0fdf4;border-radius:10px;padding:18px;text-align:center">
+            <div style="font-size:1.8rem">🌱</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#15803d" id="cat-agri">-</div>
+            <div style="font-size:0.85rem;color:#64748b">Agriculture</div>
+          </div>
+          <div style="background:#f5f3ff;border-radius:10px;padding:18px;text-align:center">
+            <div style="font-size:1.8rem">♿</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#7c3aed" id="cat-disabled">-</div>
+            <div style="font-size:0.85rem;color:#64748b">Physically Challenged</div>
+          </div>
+          <div style="background:#fff1f2;border-radius:10px;padding:18px;text-align:center">
+            <div style="font-size:1.8rem">❤️</div>
+            <div style="font-size:1.5rem;font-weight:800;color:#b91c1c" id="cat-health">-</div>
+            <div style="font-size:0.85rem;color:#64748b">Health & Wellness</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-card">
+        <h2>⚡ Quick Actions</h2>
+        <div style="display:flex;gap:12px">
+          <button class="btn-success" onclick="showSection('add-scheme',null)">➕ Add New Scheme</button>
+          <button class="btn-edit" onclick="showSection('manage-schemes',null)">📋 Manage All Schemes</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD SCHEME SECTION -->
+    <div class="page-section" id="sec-add-scheme">
+      <div class="section-card">
+        <h2>➕ Add New Government Scheme</h2>
+        <div id="add-msg" class="msg"></div>
+        <div class="form-grid">
+          <div class="form-group form-full">
+            <label>Scheme Title *</label>
+            <input type="text" id="s-title" placeholder="e.g. Post Matric Scholarship Scheme">
+          </div>
+          <div class="form-group form-full">
+            <label>Description *</label>
+            <textarea id="s-desc" placeholder="Brief description of the scheme..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="s-category">
+              <option value="">Select Category</option>
+              <option>Student</option>
+              <option>Agriculture</option>
+              <option>Physically Challenged</option>
+              <option>Health & Wellness</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Department *</label>
+            <input type="text" id="s-dept" placeholder="e.g. Ministry of Education">
+          </div>
+          <div class="form-group">
+            <label>Income Limit</label>
+            <input type="text" id="s-income" placeholder="e.g. Up to ₹2.5 Lakh">
+          </div>
+          <div class="form-group">
+            <label>Benefit Amount *</label>
+            <input type="text" id="s-benefit" placeholder="e.g. Up to ₹1,25,000">
+          </div>
+          <div class="form-group">
+            <label>Application Mode</label>
+            <select id="s-mode">
+              <option>Online</option>
+              <option>Offline</option>
+              <option>Both</option>
+            </select>
+          </div>
+          <div class="form-group">
+            
+            <label>Official Link * <span style="color:#16a34a;font-size:0.78rem">(Required - users will apply here)</span></label>
+<input type="url" id="s-link" placeholder="https://official-government-website.gov.in" required>
+          </div>
+          <div class="form-group form-full">
+            <label>Eligibility Criteria (comma separated)</label>
+            <textarea id="s-eligibility" placeholder="e.g. SC/ST/OBC students, Income below 2.5 lakh, Studying in recognized institution"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label>Key Benefits (comma separated)</label>
+            <textarea id="s-benefits" placeholder="e.g. Tuition fee reimbursement, Book allowance, Maintenance allowance"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label>Required Documents (comma separated)</label>
+            <textarea id="s-docs" placeholder="e.g. Aadhaar Card, Income Certificate, Marksheet"></textarea>
+          </div>
+        </div>
+        <div style="margin-top:20px;display:flex;gap:12px">
+          <button class="btn-success" onclick="addScheme()">✅ Add Scheme</button>
+          <button class="btn-outline" onclick="clearForm()">🔄 Clear Form</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE SCHEMES SECTION -->
+    <div class="page-section" id="sec-manage-schemes">
+      <div class="section-card">
+        <h2>📋 All Schemes</h2>
+        <input type="text" class="search-bar" placeholder="Search schemes..." oninput="searchSchemes(this.value)">
+        <div id="manage-msg" class="msg"></div>
+        <div style="overflow-x:auto">
+          <table id="schemes-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Benefit</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="schemes-tbody">
+              <tr><td colspan="6" style="text-align:center;color:#888;padding:30px">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES SECTION -->
+    <div class="page-section" id="sec-categories">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="section-card">
+          <h2>🎓 Student Schemes</h2>
+          <div id="cat-list-student"></div>
+        </div>
+        <div class="section-card">
+          <h2>🌱 Agriculture Schemes</h2>
+          <div id="cat-list-agri"></div>
+        </div>
+        <div class="section-card">
+          <h2>♿ Physically Challenged</h2>
+          <div id="cat-list-disabled"></div>
+        </div>
+        <div class="section-card">
+          <h2>❤️ Health & Wellness</h2>
+          <div id="cat-list-health"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- EDIT MODAL -->
+<div id="edit-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:999;overflow-y:auto">
+  <div style="background:#fff;border-radius:14px;padding:30px;max-width:700px;margin:40px auto">
+    <h3 style="color:#0f2557;margin-bottom:20px;font-size:1.2rem">✏️ Edit Scheme</h3>
+    <input type="hidden" id="edit-id">
+    <div class="form-grid">
+      <div class="form-group form-full"><label>Title</label><input type="text" id="edit-title"></div>
+      <div class="form-group form-full"><label>Description</label><textarea id="edit-desc"></textarea></div>
+      <div class="form-group"><label>Category</label>
+        <select id="edit-category">
+          <option>Student</option><option>Agriculture</option>
+          <option>Physically Challenged</option><option>Health & Wellness</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Department</label><input type="text" id="edit-dept"></div>
+      <div class="form-group"><label>Income Limit</label><input type="text" id="edit-income"></div>
+      <div class="form-group"><label>Benefit Amount</label><input type="text" id="edit-benefit"></div>
+      <div class="form-group"><label>Official Link</label><input type="url" id="edit-link"></div>
+      <div class="form-group"><label>Status</label>
+        <select id="edit-status"><option value="active">Active</option><option value="inactive">Inactive</option></select>
+      </div>
+      <div class="form-group form-full"><label>Eligibility Criteria</label><textarea id="edit-eligibility"></textarea></div>
+      <div class="form-group form-full"><label>Key Benefits</label><textarea id="edit-benefits"></textarea></div>
+      <div class="form-group form-full"><label>Required Documents</label><textarea id="edit-docs"></textarea></div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:20px">
+      <button class="btn-success" onclick="saveEdit()">💾 Save Changes</button>
+      <button class="btn-danger" onclick="closeModal()">✕ Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+let allSchemes = [];
+
+// Check admin auth
+window.onload = () => {
+  const token = localStorage.getItem('adminToken');
+  const admin = JSON.parse(localStorage.getItem('adminUser') || 'null');
+  if (!token || !admin) {
+    window.location.href = 'admin-login.html';
+    return;
+  }
+  document.getElementById('admin-name').textContent = `👤 ${admin.username}`;
+  loadStats();
+  loadSchemes();
+};
+
+function getToken() {
+  return localStorage.getItem('adminToken');
+}
+
+// Show section
+function showSection(name, el) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+  const titles = {
+    'dashboard': 'Dashboard',
+    'add-scheme': 'Add New Scheme',
+    'manage-schemes': 'Manage Schemes',
+    'categories': 'Schemes by Category'
+  };
+  document.getElementById('page-title').textContent = titles[name] || name;
+  if (name === 'manage-schemes') renderTable(allSchemes);
+  if (name === 'categories') renderCategories();
+}
+
+// Load stats
+async function loadStats() {
+  try {
+    const res = await fetch(`${API}/schemes/admin/stats`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    });
+    const data = await res.json();
+    document.getElementById('stat-total').textContent = data.total;
+    document.getElementById('stat-active').textContent = data.active;
+    document.getElementById('stat-student').textContent = data.student;
+    document.getElementById('stat-health').textContent = data.health;
+    document.getElementById('cat-student').textContent = data.student;
+    document.getElementById('cat-agri').textContent = data.agriculture;
+    document.getElementById('cat-disabled').textContent = data.disabled;
+    document.getElementById('cat-health').textContent = data.health;
+  } catch (err) {
+    console.error('Stats error:', err);
+  }
+}
+
+// Load all schemes
+async function loadSchemes() {
+  try {
+    const res = await fetch(`${API}/schemes/admin/all`, {
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    });
+    allSchemes = await res.json();
+    renderTable(allSchemes);
+  } catch (err) {
+    console.error('Load schemes error:', err);
+  }
+}
+
+const BADGE = {
+  'Student': 'badge-s',
+  'Agriculture': 'badge-a',
+  'Physically Challenged': 'badge-d',
+  'Health & Wellness': 'badge-h'
+};
+
+// Render table
+function renderTable(schemes) {
+  const tbody = document.getElementById('schemes-tbody');
+  if (!schemes.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#888;padding:30px">No schemes found</td></tr>';
+    return;
+  }
+  tbody.innerHTML = schemes.map((s, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td><strong>${s.title}</strong><br><span style="font-size:0.78rem;color:#888">${s.department || ''}</span></td>
+      <td><span class="badge ${BADGE[s.category] || ''}">${s.category}</span></td>
+      <td style="color:#16a34a;font-weight:600">${s.benefit_amount || '-'}</td>
+      <td><span class="badge ${s.status === 'active' ? 'badge-active' : 'badge-inactive'}">${s.status}</span></td>
+      <td>
+        <button class="btn-edit" onclick="openEdit(${s.id})">✏️ Edit</button>
+        <button class="btn-danger" onclick="deleteScheme(${s.id}, '${s.title.replace(/'/g, "\\'")}')">🗑️ Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// Search
+function searchSchemes(q) {
+  const filtered = allSchemes.filter(s =>
+    s.title.toLowerCase().includes(q.toLowerCase()) ||
+    s.category.toLowerCase().includes(q.toLowerCase())
+  );
+  renderTable(filtered);
+}
+
+// Add scheme
+async function addScheme() {
+  const msg = document.getElementById('add-msg');
+  const body = {
+    title: document.getElementById('s-title').value,
+    description: document.getElementById('s-desc').value,
+    category: document.getElementById('s-category').value,
+    department: document.getElementById('s-dept').value,
+    income_limit: document.getElementById('s-income').value,
+    benefit_amount: document.getElementById('s-benefit').value,
+    application_mode: document.getElementById('s-mode').value,
+    eligibility_criteria: document.getElementById('s-eligibility').value,
+    key_benefits: document.getElementById('s-benefits').value,
+    required_documents: document.getElementById('s-docs').value,
+    official_link: document.getElementById('s-link').value
+  };
+
+   if (!body.title || !body.category || !body.description || !body.benefit_amount) {
+    msg.textContent = '⚠️ Please fill all required fields (Title, Category, Description, Benefit)';
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    return;
+  }
+
+  if (!body.official_link || !body.official_link.startsWith('http')) {
+    msg.textContent = '⚠️ Please add a valid Official Link starting with https://';
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/schemes/admin/add`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      msg.textContent = data.message;
+      msg.className = 'msg error';
+    } else {
+      msg.textContent = '✅ Scheme added successfully!';
+      msg.className = 'msg success';
+      clearForm();
+      loadSchemes();
+      loadStats();
+    }
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+  } catch {
+    msg.textContent = 'Server error. Try again.';
+    msg.className = 'msg error';
+    msg.style.display = 'block';
+  }
+}
+
+// Clear form
+function clearForm() {
+  ['s-title','s-desc','s-category','s-dept','s-income',
+   's-benefit','s-mode','s-link','s-eligibility','s-benefits','s-docs']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+}
+
+// Open edit modal
+function openEdit(id) {
+  const s = allSchemes.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('edit-id').value = s.id;
+  document.getElementById('edit-title').value = s.title || '';
+  document.getElementById('edit-desc').value = s.description || '';
+  document.getElementById('edit-category').value = s.category || '';
+  document.getElementById('edit-dept').value = s.department || '';
+  document.getElementById('edit-income').value = s.income_limit || '';
+  document.getElementById('edit-benefit').value = s.benefit_amount || '';
+  document.getElementById('edit-link').value = s.official_link || '';
+  document.getElementById('edit-status').value = s.status || 'active';
+  document.getElementById('edit-eligibility').value = s.eligibility_criteria || '';
+  document.getElementById('edit-benefits').value = s.key_benefits || '';
+  document.getElementById('edit-docs').value = s.required_documents || '';
+  document.getElementById('edit-modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').style.display = 'none';
+}
+
+// Save edit
+async function saveEdit() {
+  const id = document.getElementById('edit-id').value;
+  const body = {
+    title: document.getElementById('edit-title').value,
+    description: document.getElementById('edit-desc').value,
+    category: document.getElementById('edit-category').value,
+    department: document.getElementById('edit-dept').value,
+    income_limit: document.getElementById('edit-income').value,
+    benefit_amount: document.getElementById('edit-benefit').value,
+    application_mode: 'Online',
+    eligibility_criteria: document.getElementById('edit-eligibility').value,
+    key_benefits: document.getElementById('edit-benefits').value,
+    required_documents: document.getElementById('edit-docs').value,
+    official_link: document.getElementById('edit-link').value,
+    status: document.getElementById('edit-status').value
+  };
+  try {
+    const res = await fetch(`${API}/schemes/admin/update/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    closeModal();
+    const msg = document.getElementById('manage-msg');
+    msg.textContent = '✅ ' + data.message;
+    msg.className = 'msg success';
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+    loadSchemes();
+    loadStats();
+  } catch {
+    alert('Update failed. Try again.');
+  }
+}
+
+// Delete scheme
+async function deleteScheme(id, title) {
+  if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+  try {
+    const res = await fetch(`${API}/schemes/admin/delete/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
+    });
+    const data = await res.json();
+    const msg = document.getElementById('manage-msg');
+    msg.textContent = '✅ ' + data.message;
+    msg.className = 'msg success';
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 3000);
+    loadSchemes();
+    loadStats();
+  } catch {
+    alert('Delete failed. Try again.');
+  }
+}
+
+// Render categories
+function renderCategories() {
+  const cats = {
+    'Student': 'cat-list-student',
+    'Agriculture': 'cat-list-agri',
+    'Physically Challenged': 'cat-list-disabled',
+    'Health & Wellness': 'cat-list-health'
+  };
+  Object.entries(cats).forEach(([cat, elId]) => {
+    const filtered = allSchemes.filter(s => s.category === cat);
+    const el = document.getElementById(elId);
+    el.innerHTML = filtered.length
+      ? filtered.map(s => `
+          <div style="padding:10px 0;border-bottom:1px solid #f0f4ff;font-size:0.88rem">
+            <strong>${s.title}</strong>
+            <span class="badge ${s.status === 'active' ? 'badge-active' : 'badge-inactive'}" style="margin-left:8px">${s.status}</span>
+            <div style="color:#64748b;font-size:0.78rem;margin-top:2px">${s.benefit_amount || '-'}</div>
+          </div>`).join('')
+      : '<p style="color:#888;font-size:0.88rem">No schemes in this category</p>';
+  });
+}
+
+// Logout
+function adminLogout() {
+  localStorage.removeItem('adminToken');
+  localStorage.removeItem('adminUser');
+  window.location.href = 'admin-login.html';
+}
+</script>
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const ham = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+
+  // Animate hamburger
+  const spans = ham.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+}
+
+// Close menu when link clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>

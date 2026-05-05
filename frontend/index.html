@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cgsp - centralized government schemes portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
+  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
+  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
+</div>
+<!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-drawer">
+
+    <!-- Header -->
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="logo-text">🏛️ CGSP</div>
+        <div class="logo-sub">Centralized Government Schemes Portal</div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="mobile-lang-bar">
+      <span>🌐 Language / భాష / भाषा</span>
+      <button class="mobile-lang-btn active" 
+        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mobile-drawer-links">
+      <a href="index.html">
+        <span class="link-icon">🏠</span>
+        <span data-lang="nav_home">Home</span>
+      </a>
+      <a href="schemes.html">
+        <span class="link-icon">📋</span>
+        <span data-lang="nav_schemes">Schemes</span>
+      </a>
+      <a href="eligibility.html">
+        <span class="link-icon">✅</span>
+        <span data-lang="nav_eligibility">Eligibility Check</span>
+      </a>
+      <a href="about.html">
+        <span class="link-icon">ℹ️</span>
+        <span data-lang="nav_about">About Us</span>
+      </a>
+      <a href="contact.html">
+        <span class="link-icon">📞</span>
+        <span data-lang="nav_contact">Contact</span>
+      </a>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="mobile-drawer-footer">
+      <a href="admin-login.html" class="mobile-admin-btn">
+        🔐 Admin Login
+      </a>
+    </div>
+
+  </div>
+</div>
+<nav>
+  <div class="nav-logo">
+    <span>🏛️</span>
+    <div><div style="font-weight:700;color:#1a3c6e">cgsp</div><div style="font-size:0.7rem;color:#888">centralized government schemes portal</div></div>
+  </div>
+  <ul class="nav-links">
+   <li><a href="index.html" data-lang="nav_home">Home</a></li>
+<li><a href="schemes.html" data-lang="nav_schemes">Schemes</a></li>
+<li><a href="eligibility.html" data-lang="nav_eligibility">Eligibility Check</a></li>
+ <li><a href="admin-dashboard.html">Dashboard</a></li>
+<li><a href="about.html" data-lang="nav_about">About Us</a></li>
+<li><a href="contact.html" data-lang="nav_contact">Contact</a></li>
+   
+   
+  </ul>
+  <button class="hamburger" onclick="openMenu()" id="hamburger-btn">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<a href="admin-login.html" class="btn-admin">Admin Login</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1 data-lang="hero_title">India's centralized Government Schemes</h1>
+    <p data-lang="hero_subtitle">Find, check eligibility and apply for 100+ government schemes across education, agriculture, health, and empowerment -all in one place.</p>
+    <div class="hero-search">
+      <input type="text" id="hero-search" placeholder="Search for schemes..." data-lang="hero_search_placeholder">
+      <button onclick="searchSchemes()">🔍</button>
+    </div>
+    <div class="hero-btns">
+     <a href="eligibility.html" class="btn-primary" data-lang="hero_btn_eligibility">Check Eligibility</a>
+     <a href="schemes.html" class="btn-outline" data-lang="hero_btn_explore">Explore Schemes</a>
+    </div>
+  </div>
+  <div class="hero-img">
+    <img src="https://illustrations.popsy.co/amber/student.svg" alt="Students" onerror="this.style.display='none'">
+  </div>
+</section>
+
+<section class="categories">
+  <div class="section-header">
+    <h2 data-lang="cat_heading">Explore by Category</h2>
+    <p data-lang="cat_subheading">Browse schemes by your specific needs</p>
+  </div>
+  <div class="cat-grid">
+
+    <!-- Student -->
+    <div class="cat-card" onclick="location.href='schemes.html?cat=Student'">
+      <div class="cat-icon-wrap" style="background:#dbeafe">🎓</div>
+      <h3 data-lang="cat_student">Student</h3>
+      <p data-lang="cat_student_desc">Scholarships, Fee Reimbursement, Skill Development &amp; more</p>
+      <a class="cat-link" data-lang="cat_explore">Explore →</a>
+    </div>
+
+    <!-- Agriculture -->
+    <div class="cat-card" onclick="location.href='schemes.html?cat=Agriculture'">
+      <div class="cat-icon-wrap" style="background:#dcfce7">🌱</div>
+      <h3 data-lang="cat_agriculture">Agriculture</h3>
+      <p data-lang="cat_agriculture_desc">Financial aid, Equipment support, Training &amp; more</p>
+      <a class="cat-link" data-lang="cat_explore">Explore →</a>
+    </div>
+
+    <!-- Physically Challenged -->
+    <div class="cat-card" onclick="location.href='schemes.html?cat=Physically%20Challenged'">
+      <div class="cat-icon-wrap" style="background:#ede9fe">♿</div>
+      <h3 data-lang="cat_disabled">Physically Challenged</h3>
+      <p data-lang="cat_disabled_desc">Assistance, Aids &amp; Appliances, Education &amp; more</p>
+      <a class="cat-link" data-lang="cat_explore">Explore →</a>
+    </div>
+
+    <!-- Health & Wellness -->
+    <div class="cat-card" onclick="location.href='schemes.html?cat=Health%20%26%20Wellness'">
+      <div class="cat-icon-wrap" style="background:#fee2e2">❤️</div>
+      <h3 data-lang="cat_health">Health &amp; Wellness</h3>
+      <p data-lang="cat_health_desc">Health insurance, Treatment aid, Wellness programs &amp; more</p>
+      <a class="cat-link" data-lang="cat_explore">Explore →</a>
+    </div>
+
+  </div>
+</section>
+<section class="stats">
+  <div class="stat"><h3>100+</h3><p>Schemes Available</p></div>
+  <div class="stat"><h3>25+</h3><p>Departments</p></div>
+  <div class="stat"><h3>10L+</h3><p>Students Benefited</p></div>
+  <div class="stat"><h3>24/7</h3><p>Support</p></div>
+</section>
+
+<script src="js/main.js"></script>
+<script src="js/language.js"></script>
+<script>
+  window.addEventListener('load', initLanguage);
+</script>
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const ham = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+
+  // Animate hamburger
+  const spans = ham.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+}
+
+// Close menu when link clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+<script>
+// ===== MOBILE MENU =====
+function openMenu() {
+  document.getElementById('mobile-menu').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function updateMobileLang(lang) {
+  document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  closeMenu();
+}
+
+// Close menu on link click
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  link.addEventListener('click', closeMenu);
+});
+
+// Mark active page in mobile menu
+const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
+  const href = link.getAttribute('href');
+  if (href === currentPage) {
+    link.style.background = '#eff4ff';
+    link.style.color = '#2563eb';
+    link.style.fontWeight = '700';
+  }
+});
+</script>
+</body>
+</html>

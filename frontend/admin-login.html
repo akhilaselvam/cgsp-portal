@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - cgsp</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e8effe, #f5f8ff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 42px;
+      width: 420px;
+      box-shadow: 0 8px 40px rgba(15,37,87,0.13);
+      border: 1.5px solid #e1e8f5;
+    }
+    .admin-tag {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 1.5rem;
+      color: #0f2557;
+      margin-bottom: 6px;
+      font-weight: 800;
+    }
+    .sub {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 26px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #e1e8f5;
+      border-radius: 9px;
+      font-size: 0.93rem;
+      font-family: 'Segoe UI', sans-serif;
+      transition: border-color 0.18s;
+      color: #1e293b;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: #0f2557;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.18s;
+    }
+    .btn-login:hover { background: #2563eb; }
+    .err-msg {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+    .back-link a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+   
+  </style>
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <!-- MOBILE MENU DRAWER -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mobile-overlay" onclick="closeMenu()"></div>
+  <div class="mobile-drawer">
+
+    <!-- Header -->
+    <div class="mobile-drawer-header">
+      <div>
+        <div class="logo-text">🏛️ CGSP</div>
+        <div class="logo-sub">Centralized Government Schemes Portal</div>
+      </div>
+      <button class="close-btn" onclick="closeMenu()">✕</button>
+    </div>
+
+    <!-- Language switcher -->
+    <div class="mobile-lang-bar">
+      <span>🌐 Language / భాష / भाषा</span>
+      <button class="mobile-lang-btn active" 
+        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
+      <button class="mobile-lang-btn" 
+        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
+    </div>
+
+    <!-- Navigation Links -->
+    <div class="mobile-drawer-links">
+      <a href="index.html">
+        <span class="link-icon">🏠</span>
+        <span data-lang="nav_home">Home</span>
+      </a>
+      <a href="schemes.html">
+        <span class="link-icon">📋</span>
+        <span data-lang="nav_schemes">Schemes</span>
+      </a>
+      <a href="eligibility.html">
+        <span class="link-icon">✅</span>
+        <span data-lang="nav_eligibility">Eligibility Check</span>
+      </a>
+      <a href="about.html">
+        <span class="link-icon">ℹ️</span>
+        <span data-lang="nav_about">About Us</span>
+      </a>
+      <a href="contact.html">
+        <span class="link-icon">📞</span>
+        <span data-lang="nav_contact">Contact</span>
+      </a>
+    </div>
+
+    <!-- Admin Button -->
+    <div class="mobile-drawer-footer">
+      <a href="admin-login.html" class="mobile-admin-btn">
+        🔐 Admin Login
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<div class="box">
+  <div class="admin-tag">🔐 Admin Portal</div>
+  <h2>Admin Login</h2>
+  <p class="sub">Sign in to manage government schemes</p>
+
+  <div class="err-msg" id="err-msg"></div>
+
+  <div class="form-group">
+    <label>Admin Email</label>
+    <input type="email" id="email" placeholder="enter admin email">
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter password">
+  </div>
+
+  <button class="btn-login" onclick="adminLogin()">🔐 Login as Admin</button>
+
+
+  <div class="back-link">
+    <a href="index.html">← Back to Public Portal</a>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+async function adminLogin() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errEl = document.getElementById('err-msg');
+  errEl.style.display = 'none';
+
+   function adminlogout(){
+    if(confirm('Are you sure you want to logout')){
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      window.location.href='admin-login.html';
+    }
+  }
+
+  if (!email || !password) {
+    errEl.textContent = '⚠️ Please enter email and password';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    console.log('Trying login with:', email);
+
+    const res = await fetch(`${API}/auth/admin-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+    console.log('Response:', data);
+
+    if (!res.ok) {
+      errEl.textContent = '❌ ' + data.message;
+      errEl.style.display = 'block';
+      return;
+    }
+
+    localStorage.setItem('adminToken', data.token);
+    localStorage.setItem('adminUser', JSON.stringify(data.admin));
+
+    alert('✅ Login successful! Going to dashboard...');
+    window.location.href = 'admin-dashboard.html';
+
+  } catch (e) {
+    console.error('Error:', e);
+    errEl.textContent = '❌ Cannot connect to server. Is backend running on port 5000?';
+    errEl.style.display = 'block';
+  }
+}
+</script>
+<script>
+function toggleMenu() {
+  const nav = document.querySelector('.nav-links');
+  const ham = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+
+  // Animate hamburger
+  const spans = ham.querySelectorAll('span');
+  if (nav.classList.contains('open')) {
+    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+    spans[1].style.opacity = '0';
+    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+  } else {
+    spans[0].style.transform = 'none';
+    spans[1].style.opacity = '1';
+    spans[2].style.transform = 'none';
+  }
+}
+
+// Close menu when link clicked
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.nav-links').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
