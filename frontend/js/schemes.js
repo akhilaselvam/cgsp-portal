@@ -1,4 +1,4 @@
-const API = 'http://localhost:5000/api';
+const API = 'https://cgsp-backend.onrender.com/api';
 let currentCat = 'All';
 
 const badgeClass = { 'Student':'badge-student', 'Agriculture':'badge-agriculture', 'Physically Challenged':'badge-disabled', 'Health & Wellness':'badge-health' };
