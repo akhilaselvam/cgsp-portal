@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scheme Details - CGSP</title>
-
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/mobile.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Segoe UI',sans-serif;background:#f5f8ff;color:#1e293b;}
@@ -13,11 +14,12 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .nav-icon{width:36px;height:36px;background:#0f2557;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
 .nav-links{display:flex;gap:6px;list-style:none;}
 .nav-links a{padding:6px 13px;border-radius:7px;font-size:0.88rem;color:#64748b;text-decoration:none;font-weight:500;}
-.nav-links a:hover,.nav-links a.active{color:#2563eb;background:#eff4ff;}
+.nav-links a:hover{color:#2563eb;background:#eff4ff;}
 .btn-admin{background:#0f2557;color:#fff;padding:8px 22px;border-radius:8px;font-size:0.88rem;font-weight:600;text-decoration:none;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:8px;}
+.hamburger span{width:26px;height:2.5px;background:#0f2557;border-radius:3px;display:block;}
 .page{padding:30px 60px 60px;max-width:1000px;margin:auto;}
 .back-btn{display:inline-flex;align-items:center;gap:6px;color:#2563eb;font-size:0.9rem;font-weight:600;text-decoration:none;margin-bottom:20px;cursor:pointer;background:none;border:none;padding:0;font-family:'Segoe UI',sans-serif;}
-.back-btn:hover{text-decoration:underline;}
 .card{background:#fff;border-radius:16px;border:1.5px solid #e1e8f5;overflow:hidden;}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;padding:30px 32px 22px;border-bottom:1.5px solid #f0f4ff;}
 .badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:0.75rem;font-weight:700;margin-bottom:10px;}
@@ -45,32 +47,26 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .box ul li:last-child{border:none;}
 .box p{font-size:0.88rem;color:#444;line-height:1.75;}
 .apply-bar{padding:22px 32px;border-top:1.5px solid #f0f4ff;background:#f8faff;display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
-.btn-apply{display:inline-flex;align-items:center;gap:7px;background:#0f2557;color:#fff;padding:12px 26px;border-radius:10px;text-decoration:none;font-size:0.93rem;font-weight:700;transition:all 0.18s;}
+.btn-apply{display:inline-flex;align-items:center;gap:7px;background:#0f2557;color:#fff;padding:12px 26px;border-radius:10px;text-decoration:none;font-size:0.93rem;font-weight:700;transition:all 0.18s;cursor:pointer;border:none;}
 .btn-apply:hover{background:#2563eb;transform:translateY(-2px);}
-.btn-green{display:inline-flex;align-items:center;gap:7px;background:#16a34a;color:#fff;padding:12px 26px;border-radius:10px;text-decoration:none;font-size:0.93rem;font-weight:700;transition:all 0.18s;}
+.btn-green{display:inline-flex;align-items:center;gap:7px;background:#16a34a;color:#fff;padding:12px 26px;border-radius:10px;text-decoration:none;font-size:0.93rem;font-weight:700;transition:all 0.18s;cursor:pointer;border:none;}
 .btn-green:hover{background:#15803d;transform:translateY(-2px);}
 .btn-grey{display:inline-flex;align-items:center;gap:7px;background:#94a3b8;color:#fff;padding:12px 26px;border-radius:10px;font-size:0.93rem;font-weight:700;cursor:not-allowed;}
 .note{font-size:0.8rem;color:#64748b;width:100%;margin-top:2px;}
-.loading{text-align:center;padding:60px;background:#fff;border-radius:16px;border:1.5px solid #e1e8f5;color:#64748b;}
-.err{text-align:center;padding:60px;background:#fff;border-radius:16px;border:1.5px solid #fecaca;}
-.err h3{color:#b91c1c;margin-bottom:8px;}
-.err p{color:#64748b;font-size:0.88rem;}
+.loading-box{text-align:center;padding:80px 40px;background:#fff;border-radius:16px;border:1.5px solid #e1e8f5;}
+.spinner{width:40px;height:40px;border:4px solid #e1e8f5;border-top-color:#2563eb;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.error-box{text-align:center;padding:60px 40px;background:#fff;border-radius:16px;border:1.5px solid #fecaca;}
+.error-box h3{color:#b91c1c;margin-bottom:8px;}
+.error-box p{color:#64748b;font-size:0.88rem;}
 </style>
-<link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
-  <div class="lang-bar">
-  <span>🌐 Language:</span>
-  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
-  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
-  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
-</div>
-<!-- MOBILE MENU DRAWER -->
+
+<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobile-menu">
   <div class="mobile-overlay" onclick="closeMenu()"></div>
   <div class="mobile-drawer">
-
-    <!-- Header -->
     <div class="mobile-drawer-header">
       <div>
         <div class="logo-text">🏛️ CGSP</div>
@@ -78,51 +74,19 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
       </div>
       <button class="close-btn" onclick="closeMenu()">✕</button>
     </div>
-
-    <!-- Language switcher -->
-    <div class="mobile-lang-bar">
-      <span>🌐 Language / భాష / भाषा</span>
-      <button class="mobile-lang-btn active" 
-        onclick="applyLanguage('en');updateMobileLang('en')">English</button>
-      <button class="mobile-lang-btn" 
-        onclick="applyLanguage('te');updateMobileLang('te')">తెలుగు</button>
-      <button class="mobile-lang-btn" 
-        onclick="applyLanguage('hi');updateMobileLang('hi')">हिंदी</button>
-    </div>
-
-    <!-- Navigation Links -->
     <div class="mobile-drawer-links">
-      <a href="index.html">
-        <span class="link-icon">🏠</span>
-        <span data-lang="nav_home">Home</span>
-      </a>
-      <a href="schemes.html">
-        <span class="link-icon">📋</span>
-        <span data-lang="nav_schemes">Schemes</span>
-      </a>
-      <a href="eligibility.html">
-        <span class="link-icon">✅</span>
-        <span data-lang="nav_eligibility">Eligibility Check</span>
-      </a>
-      <a href="about.html">
-        <span class="link-icon">ℹ️</span>
-        <span data-lang="nav_about">About Us</span>
-      </a>
-      <a href="contact.html">
-        <span class="link-icon">📞</span>
-        <span data-lang="nav_contact">Contact</span>
-      </a>
+      <a href="index.html"><span class="link-icon">🏠</span> Home</a>
+      <a href="schemes.html"><span class="link-icon">📋</span> Schemes</a>
+      <a href="eligibility.html"><span class="link-icon">✅</span> Eligibility Check</a>
+      <a href="about.html"><span class="link-icon">ℹ️</span> About Us</a>
+      <a href="contact.html"><span class="link-icon">📞</span> Contact</a>
     </div>
-
-    <!-- Admin Button -->
     <div class="mobile-drawer-footer">
-      <a href="admin-login.html" class="mobile-admin-btn">
-        🔐 Admin Login
-      </a>
+      <a href="admin-login.html" class="mobile-admin-btn">🔐 Admin Login</a>
     </div>
-
   </div>
 </div>
+
 <nav>
   <div class="nav-brand" onclick="location.href='index.html'">
     <div class="nav-icon">🏛️</div>
@@ -138,158 +102,229 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
     <li><a href="about.html">About Us</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
-  <button class="hamburger" onclick="openMenu()" id="hamburger-btn">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-<a href="admin-login.html" class="btn-admin">Admin Login</a>
+  <button class="hamburger" onclick="openMenu()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="admin-login.html" class="btn-admin">Admin Login</a>
 </nav>
 
 <div class="page">
   <button class="back-btn" onclick="location.href='schemes.html'">← Back to Schemes</button>
   <div id="content">
-    <div class="loading">
-      <div style="font-size:2rem;margin-bottom:12px">⏳</div>
-      <p>Loading scheme details...</p>
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p style="color:#64748b">Loading scheme details...</p>
     </div>
   </div>
 </div>
 
 <script>
+// ===== IMPORTANT: Use Render backend URL =====
 const API = 'https://cgsp-backend.onrender.com/api';
 
-const BADGE = {'Student':'bs','Agriculture':'ba','Physically Challenged':'bd','Health & Wellness':'bh'};
-const ICON  = {'Student':'🎓','Agriculture':'🌱','Physically Challenged':'♿','Health & Wellness':'❤️'};
+const BADGE = {
+  'Student':'bs',
+  'Agriculture':'ba',
+  'Physically Challenged':'bd',
+  'Health & Wellness':'bh'
+};
 
-async function load() {
-  const id = new URLSearchParams(window.location.search).get('id');
-  if (!id) { showErr('No scheme ID. Please go back and click View Details.'); return; }
+const ICON = {
+  'Student':'🎓',
+  'Agriculture':'🌱',
+  'Physically Challenged':'♿',
+  'Health & Wellness':'❤️'
+};
+
+// Get ID from URL
+function getId() {
+  return new URLSearchParams(window.location.search).get('id');
+}
+
+// Show error message
+function showErr(msg) {
+  document.getElementById('content').innerHTML = `
+    <div class="error-box">
+      <div style="font-size:2rem;margin-bottom:12px">❌</div>
+      <h3>Error Loading Scheme</h3>
+      <p>${msg}</p>
+      <br>
+      <a href="schemes.html" 
+        style="color:#2563eb;font-weight:600;text-decoration:none">
+        ← Back to All Schemes
+      </a>
+    </div>`;
+}
+
+// Open link safely in new tab
+function openLink(url) {
+  if (url && url !== 'null' && url !== 'undefined' && url.startsWith('http')) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  } else {
+    alert('Official link not available for this scheme. Please search on www.india.gov.in');
+  }
+}
+
+// Load scheme from API
+async function loadScheme() {
+  const id = getId();
+
+  if (!id) {
+    showErr('No scheme selected. Please go back and click View Details on a scheme.');
+    return;
+  }
 
   try {
-    const res = await fetch(API + '/schemes/' + id);
-    if (!res.ok) { showErr('Scheme not found.'); return; }
-    const s = await res.json();
-    render(s);
-  } catch(e) {
-    showErr('Cannot connect to server.<br>Make sure backend is running:<br><code>node server.js</code> in backend folder.');
+    const response = await fetch(API + '/schemes/' + id, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (response.status === 404) {
+      showErr('This scheme was not found. It may have been removed by admin.');
+      return;
+    }
+
+    if (!response.ok) {
+      showErr('Server error. Please try again in a moment.');
+      return;
+    }
+
+    const scheme = await response.json();
+
+    if (!scheme || !scheme.title) {
+      showErr('Scheme data is incomplete. Please go back and try another scheme.');
+      return;
+    }
+
+    renderScheme(scheme);
+
+  } catch (error) {
+    console.error('Error:', error);
+    showErr('Cannot connect to server. Please check internet connection and try again.');
   }
 }
 
-function showErr(msg) {
-  document.getElementById('content').innerHTML =
-    '<div class="err"><h3>❌ Error</h3><p>' + msg + '</p><br><a href="schemes.html" style="color:#2563eb;font-weight:600">← Back to Schemes</a></div>';
-}
+// Render scheme on page
+function renderScheme(s) {
+  // Parse comma separated fields safely
+  function parseList(str) {
+    if (!str || str === 'null' || str === 'undefined' || str.trim() === '') {
+      return ['Visit official website for details'];
+    }
+    return str.split(',').map(x => x.trim()).filter(x => x.length > 0);
+  }
 
-function render(s) {
-  const elig = s.eligibility_criteria ? s.eligibility_criteria.split(',').map(x=>x.trim()).filter(x=>x) : ['Visit official website'];
-  const bens = s.key_benefits        ? s.key_benefits.split(',').map(x=>x.trim()).filter(x=>x)        : ['Visit official website'];
-  const docs = s.required_documents  ? s.required_documents.split(',').map(x=>x.trim()).filter(x=>x)  : ['Visit official website'];
+  const elig = parseList(s.eligibility_criteria);
+  const bens = parseList(s.key_benefits);
+  const docs = parseList(s.required_documents);
 
-  const hasLink = s.official_link && 
-                s.official_link.trim() !== '' && 
-                s.official_link !== 'null' && 
-                s.official_link !== 'undefined' &&
-                s.official_link !== null &&
-                s.official_link.startsWith('http');
-  
-     const link = (s.official_link && s.official_link.trim() !== '' && s.official_link !== 'null' && s.official_link !== 'undefined' && s.official_link !== null) ? s.official_link.trim() : null;
+  // Check if official link is valid
+  const hasLink = s.official_link &&
+                  s.official_link !== 'null' &&
+                  s.official_link !== 'undefined' &&
+                  s.official_link.trim() !== '' &&
+                  s.official_link.startsWith('http');
 
-  const officialBtn = link
-    ? `<a href="${link}" target="_blank" rel="noopener noreferrer" class="btn-green">🌐 Visit Official Website</a>`
-    : `<span class="btn-grey">🌐 No Official Link Added</span>`;
+  const linkUrl = hasLink ? s.official_link.trim() : null;
 
-  const applyBtn = link
-    ? `<a href="${link}" target="_blank" rel="noopener noreferrer" class="btn-apply">📝 Apply Now</a>`
-    : `<span class="btn-grey" title="No official link available">📝 Apply Now</span>`;           
   document.getElementById('content').innerHTML = `
-  <div class="card">
-    <div class="card-top">
-      <div>
-        <span class="badge ${BADGE[s.category]||'bs'}">${s.category}</span>
-        <h1>${s.title}</h1>
-        <p>${s.description||''}</p>
+    <div class="card">
+
+      <div class="card-top">
+        <div>
+          <span class="badge ${BADGE[s.category] || 'bs'}">${s.category || 'Government'}</span>
+          <h1>${s.title}</h1>
+          <p>${s.description || 'Government scheme for eligible citizens.'}</p>
+        </div>
+        <div class="card-icon">${ICON[s.category] || '🏛️'}</div>
       </div>
-      <div class="card-icon">${ICON[s.category]||'🏛️'}</div>
-    </div>
-    <div class="meta-bar">
-      <div class="chip">🏛️ <strong>${s.department||'Government of India'}</strong></div>
-      <div class="chip">💰 Income: <strong>${s.income_limit||'N/A'}</strong></div>
-      <div class="chip">🎁 Benefit: <strong>${s.benefit_amount||'Variable'}</strong></div>
-      <div class="chip">💻 Mode: <strong>${s.application_mode||'Online'}</strong></div>
-    </div>
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('overview',this)">Overview</button>
-      <button class="tab" onclick="switchTab('eligibility',this)">Eligibility</button>
-      <button class="tab" onclick="switchTab('benefits',this)">Benefits</button>
-      <button class="tab" onclick="switchTab('documents',this)">Documents</button>
-    </div>
-    <div class="tc active" id="tc-overview">
-      <div class="two">
-        <div class="box"><h4>📋 About</h4><p>${s.description||''}</p></div>
-        <div class="box"><h4>👤 Who Can Apply</h4><ul>${elig.map(e=>'<li>✅ '+e+'</li>').join('')}</ul></div>
+
+      <div class="meta-bar">
+        <div class="chip">🏛️ <strong>${s.department || 'Government of India'}</strong></div>
+        <div class="chip">💰 Income: <strong>${s.income_limit || 'N/A'}</strong></div>
+        <div class="chip">🎁 Benefit: <strong>${s.benefit_amount || 'As per guidelines'}</strong></div>
+        <div class="chip">💻 Mode: <strong>${s.application_mode || 'Online'}</strong></div>
       </div>
-      <div class="two" style="margin-top:16px">
-        <div class="box"><h4>🎁 Benefits</h4><ul>${bens.map(b=>'<li>⭐ '+b+'</li>').join('')}</ul></div>
-        <div class="box"><h4>📄 Documents</h4><ul>${docs.map(d=>'<li>📎 '+d+'</li>').join('')}</ul></div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('overview',this)">Overview</button>
+        <button class="tab" onclick="switchTab('eligibility',this)">Eligibility</button>
+        <button class="tab" onclick="switchTab('benefits',this)">Benefits</button>
+        <button class="tab" onclick="switchTab('documents',this)">Documents</button>
       </div>
-    </div>
-    <div class="tc" id="tc-eligibility">
-      <div class="box"><h4>✅ Eligibility Criteria</h4><ul>${elig.map(e=>'<li>✅ '+e+'</li>').join('')}</ul></div>
-    </div>
-    <div class="tc" id="tc-benefits">
-      <div class="box"><h4>🎁 Key Benefits</h4><ul>${bens.map(b=>'<li>⭐ '+b+'</li>').join('')}</ul></div>
-    </div>
-    <div class="tc" id="tc-documents">
-      <div class="box"><h4>📄 Required Documents</h4><ul>${docs.map(d=>'<li>📎 '+d+'</li>').join('')}</ul></div>
-    </div>
-    <div class="apply-bar">
-      ${applyBtn}
-      ${officialBtn}
-      <p class="note">🔒 Apply Now and Visit Official Website both open the official government website in a new tab.</p>
-    </div>
-  </div>`;
+
+      <div class="tc active" id="tc-overview">
+        <div class="two">
+          <div class="box">
+            <h4>📋 About the Scheme</h4>
+            <p>${s.description || 'Government scheme for eligible citizens.'}</p>
+          </div>
+          <div class="box">
+            <h4>👤 Who Can Apply?</h4>
+            <ul>${elig.map(e => `<li>✅ ${e}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div class="two" style="margin-top:16px">
+          <div class="box">
+            <h4>🎁 Key Benefits</h4>
+            <ul>${bens.map(b => `<li>⭐ ${b}</li>`).join('')}</ul>
+          </div>
+          <div class="box">
+            <h4>📄 Required Documents</h4>
+            <ul>${docs.map(d => `<li>📎 ${d}</li>`).join('')}</ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tc" id="tc-eligibility">
+        <div class="box">
+          <h4>✅ Eligibility Criteria</h4>
+          <ul>${elig.map(e => `<li>✅ ${e}</li>`).join('')}</ul>
+        </div>
+      </div>
+
+      <div class="tc" id="tc-benefits">
+        <div class="box">
+          <h4>🎁 Key Benefits</h4>
+          <ul>${bens.map(b => `<li>⭐ ${b}</li>`).join('')}</ul>
+        </div>
+      </div>
+
+      <div class="tc" id="tc-documents">
+        <div class="box">
+          <h4>📄 Required Documents</h4>
+          <ul>${docs.map(d => `<li>📎 ${d}</li>`).join('')}</ul>
+        </div>
+      </div>
+
+      <div class="apply-bar">
+        ${linkUrl
+          ? `<button class="btn-apply" onclick="openLink('${linkUrl}')">
+               📝 Apply Now
+             </button>
+             <button class="btn-green" onclick="openLink('${linkUrl}')">
+               🌐 Visit Official Website
+             </button>`
+          : `<button class="btn-grey">📝 Apply Now — No Link Available</button>`
+        }
+        <p class="note">
+          🔒 Apply Now opens the official government website in a new tab.
+        </p>
+      </div>
+
+    </div>`;
 }
 
+// Switch tabs
 function switchTab(name, btn) {
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tc').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tc').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tc-'+name).classList.add('active');
+  document.getElementById('tc-' + name).classList.add('active');
 }
 
-load();
-</script>
-<script src="js/language.js"></script>
-<script>window.addEventListener('load', initLanguage);</script>
-<script>
-function toggleMenu() {
-  const nav = document.querySelector('.nav-links');
-  const ham = document.getElementById('hamburger');
-  nav.classList.toggle('open');
-
-  // Animate hamburger
-  const spans = ham.querySelectorAll('span');
-  if (nav.classList.contains('open')) {
-    spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-    spans[1].style.opacity = '0';
-    spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-  } else {
-    spans[0].style.transform = 'none';
-    spans[1].style.opacity = '1';
-    spans[2].style.transform = 'none';
-  }
-}
-
-// Close menu when link clicked
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    document.querySelector('.nav-links').classList.remove('open');
-  });
-});
-</script>
-<script>
-// ===== MOBILE MENU =====
+// Mobile menu
 function openMenu() {
   document.getElementById('mobile-menu').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -300,29 +335,8 @@ function closeMenu() {
   document.body.style.overflow = '';
 }
 
-function updateMobileLang(lang) {
-  document.querySelectorAll('.mobile-lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-  event.target.classList.add('active');
-  closeMenu();
-}
-
-// Close menu on link click
-document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
-  link.addEventListener('click', closeMenu);
-});
-
-// Mark active page in mobile menu
-const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-document.querySelectorAll('.mobile-drawer-links a').forEach(link => {
-  const href = link.getAttribute('href');
-  if (href === currentPage) {
-    link.style.background = '#eff4ff';
-    link.style.color = '#2563eb';
-    link.style.fontWeight = '700';
-  }
-});
+// Load scheme when page opens
+loadScheme();
 </script>
 </body>
 </html>
