@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eligibility Results - CGSP</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',sans-serif; background:#f5f8ff; color:#1e293b; }
+
+    nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 48px; height:64px; background:#fff;
+      border-bottom:1.5px solid #e1e8f5; position:sticky; top:0; z-index:200;
+    }
+    .nav-brand { display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .nav-icon { width:36px; height:36px; background:#0f2557; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .nav-links { display:flex; gap:6px; list-style:none; }
+    .nav-links a { padding:6px 13px; border-radius:7px; font-size:0.88rem; color:#64748b; text-decoration:none; font-weight:500; }
+    .nav-links a:hover, .nav-links a.active { color:#2563eb; background:#eff4ff; }
+    .btn-admin { background:#0f2557; color:#fff; padding:8px 22px; border-radius:8px; font-size:0.88rem; font-weight:600; text-decoration:none; }
+
+    .results-page { padding:40px 80px; max-width:950px; margin:auto; }
+
+    .result-banner {
+      background:#dcfce7; border:1.5px solid #86efac;
+      border-radius:12px; padding:16px 22px;
+      display:flex; align-items:center; gap:12px;
+      color:#166534; font-weight:600; margin-bottom:26px;
+      font-size:0.95rem;
+    }
+
+    .no-result-banner {
+      background:#fef3c7; border:1.5px solid #fcd34d;
+      border-radius:12px; padding:16px 22px;
+      display:flex; align-items:center; gap:12px;
+      color:#92400e; font-weight:600; margin-bottom:26px;
+      font-size:0.95rem;
+    }
+
+    .result-card {
+      background:#fff; border:1.5px solid #e1e8f5;
+      border-radius:12px; padding:20px 24px;
+      margin-bottom:14px; display:flex;
+      justify-content:space-between; align-items:center;
+      transition:all 0.2s;
+    }
+    .result-card:hover { box-shadow:0 4px 20px rgba(15,37,87,0.08); border-color:#2563eb; }
+
+    .rc-left h3 { font-size:0.97rem; color:#0f2557; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:8px; }
+    .rc-left p { font-size:0.83rem; color:#64748b; max-width:500px; line-height:1.5; }
+
+    .rc-right { text-align:right; flex-shrink:0; margin-left:20px; }
+    .rc-amount { font-weight:700; color:#16a34a; font-size:0.95rem; white-space:nowrap; margin-bottom:6px; }
+    .rc-link {
+      display:inline-block; color:#2563eb; font-size:0.83rem;
+      font-weight:600; cursor:pointer; text-decoration:none;
+      background:#eff4ff; padding:5px 12px; border-radius:6px;
+    }
+    .rc-link:hover { background:#dbeafe; }
+
+    .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:0.72rem; font-weight:700; }
+    .badge-s { background:#dbeafe; color:#1d4ed8; }
+    .badge-a { background:#dcfce7; color:#15803d; }
+    .badge-d { background:#ede9fe; color:#7c3aed; }
+    .badge-h { background:#fee2e2; color:#b91c1c; }
+
+    .back-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      color:#2563eb; font-size:0.9rem; font-weight:600;
+      cursor:pointer; background:none; border:none;
+      padding:0; margin-bottom:20px;
+      font-family:'Segoe UI',sans-serif;
+    }
+    .back-btn:hover { text-decoration:underline; }
+
+    .note { font-size:0.8rem; color:#64748b; margin-top:20px; }
+
+    .check-again-btn {
+      display:inline-flex; align-items:center; gap:8px;
+      background:#0f2557; color:#fff; padding:12px 24px;
+      border-radius:10px; text-decoration:none;
+      font-size:0.9rem; font-weight:700; margin-top:16px;
+      border:none; cursor:pointer;
+    }
+    .check-again-btn:hover { background:#2563eb; }
+
+    /* MOBILE */
+    @media (max-width:768px) {
+      nav { padding:0 16px; }
+      .nav-links, .btn-admin { display:none; }
+      .results-page { padding:20px 16px; }
+      .result-card { flex-direction:column; align-items:flex-start; gap:12px; }
+      .rc-right { text-align:left; margin-left:0; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand" onclick="location.href='index.html'">
+    <div class="nav-icon">🏛️</div>
+    <div>
+      <div style="font-weight:700;color:#0f2557;font-size:0.95rem">CGSP</div>
+      <div style="font-size:0.68rem;color:#888">Centralized Government Schemes Portal</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="schemes.html">Schemes</a></li>
+    <li><a href="eligibility.html" class="active">Eligibility Check</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="admin-login.html" class="btn-admin">Admin Login</a>
+</nav>
+
+<div class="results-page">
+  <button class="back-btn" onclick="location.href='eligibility.html'">← Back to Eligibility Check</button>
+
+  <div id="banner"></div>
+  <div id="results-list"></div>
+
+  <p class="note">🔒 Note: Eligibility is based on the information provided. Please check official guidelines before applying.</p>
+
+  <br>
+  <button class="check-again-btn" onclick="location.href='eligibility.html'">
+    🔄 Check Again
+  </button>
+</div>
+
+<script>
+const BADGE = {
+  'Student': 'badge-s',
+  'Agriculture': 'badge-a',
+  'Physically Challenged': 'badge-d',
+  'Health & Wellness': 'badge-h'
+};
+
+window.onload = () => {
+  const banner = document.getElementById('banner');
+  const list = document.getElementById('results-list');
+
+  // Get saved results from localStorage
+  const saved = localStorage.getItem('eligibilityResults');
+
+  if (!saved) {
+    banner.innerHTML = `
+      <div class="no-result-banner">
+        ⚠️ No eligibility data found. Please go back and fill the form.
+      </div>`;
+    return;
+  }
+
+  const data = JSON.parse(saved);
+  const schemes = data.eligible || [];
+  const category = data.category || '';
+  const count = schemes.length;
+
+  // Show banner
+  if (count > 0) {
+    banner.innerHTML = `
+      <div class="result-banner">
+        ✅ Great! You are eligible for <strong>&nbsp;${count} scheme(s)&nbsp;</strong>
+        ${category ? 'in <strong>' + category + '</strong> category' : ''}.
+        Based on the information you provided.
+      </div>`;
+  } else {
+    banner.innerHTML = `
+      <div class="no-result-banner">
+        ⚠️ No schemes found for the selected category.
+        Try selecting a different category.
+      </div>`;
+    return;
+  }
+
+  // Show scheme cards
+  list.innerHTML = schemes.map(s => `
+    <div class="result-card">
+      <div class="rc-left">
+        <h3>
+          ${s.title}
+          <span class="badge ${BADGE[s.category] || 'badge-s'}">${s.category}</span>
+        </h3>
+        <p>${(s.description || '').substring(0, 120)}...</p>
+      </div>
+      <div class="rc-right">
+        <div class="rc-amount">${s.benefit_amount || 'Variable'}</div>
+        <a href="scheme-detail.html?id=${s.id}" class="rc-link">View Details →</a>
+      </div>
+    </div>
+  `).join('');
+};
+</script>
+</body>
+</html>

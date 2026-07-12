@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cgsp - centralized government sc    hemes portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
+  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
+  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
+</div>
+<nav>
+  <div class="nav-logo">
+    <span>🏛️</span>
+    <div><div style="font-weight:700;color:#1a3c6e">cgsp</div><div style="font-size:0.7rem;color:#888">centralized government schemes portal</div></div>
+  </div>
+  <ul class="nav-links">
+   <li><a href="index.html" data-lang="nav_home">Home</a></li>
+<li><a href="schemes.html" data-lang="nav_schemes">Schemes</a></li>
+<li><a href="eligibility.html" data-lang="nav_eligibility">Eligibility Check</a></li>
+ <li><a href="admin-dashboard.html">Dashboard</a></li>
+<li><a href="about.html" data-lang="nav_about">About Us</a></li>
+<li><a href="contact.html" data-lang="nav_contact">Contact</a></li>
+   
+   
+  </ul>
+
+  <a href="admin-login.html" class="btn-admin">Admin Login</a>
+
+<!-- HAMBURGER -->
+<button class="hamburger" id="hamburger" onclick="toggleMenu()">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+</nav>
+
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">🏠 Home</a>
+  <a href="schemes.html">📋 Schemes</a>
+  <a href="eligibility.html">✅ Eligibility Check</a>
+  <a href="about.html">ℹ️ About Us</a>
+  <a href="contact.html">📞 Contact</a>
+  <a href="admin-login.html" class="mob-admin">🔐 Admin Login</a>
+</div>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1 data-lang="hero_title">India's centralized Government Schemes</h1>
+    <p data-lang="hero_subtitle">Find, check eligibility and apply for 100+ government schemes across education, agriculture, health, and empowerment -all in one place.</p>
+    <div class="hero-search">
+     <input type="text" id="hero-search" 
+  placeholder="Search for schemes..."
+  onkeypress="if(event.key==='Enter') heroSearch()">
+      <button onclick="searchSchemes()">🔍</button>
+    </div>
+    <div class="hero-btns">
+     <a href="eligibility.html" class="btn-primary" data-lang="hero_btn_eligibility">Check Eligibility</a>
+     <a href="schemes.html" class="btn-outline" data-lang="hero_btn_explore">Explore Schemes</a>
+    </div>
+  </div>
+  <div class="hero-img">
+    <img src="https://illustrations.popsy.co/amber/student.svg" alt="Students" onerror="this.style.display='none'">
+  </div>
+</section>
+
+<section class="categories">
+  <h2 data-lang="cat_heading">Explore by Category</h2>
+  <p>Browse schemes by your specific needs</p>
+  <div class="cat-grid">
+  <div class="cat-card" onclick="goToCategory('Student')">
+    <div class="cat-icon-wrap" style="background:#dbeafe">🎓</div>
+    <h3 data-lang="cat_student">Student</h3>
+    <p data-lang="cat_student_desc">Scholarships, Fee Reimbursement, Skill Development & more</p>
+    <div class="cat-link" data-lang="cat_explore">Explore →</div>
+  </div>
+  <div class="cat-card" onclick="goToCategory('Agriculture')">
+    <div class="cat-icon-wrap" style="background:#dcfce7">🌱</div>
+    <h3 data-lang="cat_agriculture">Agriculture</h3>
+    <p data-lang="cat_agriculture_desc">Financial aid, Equipment support, Training & more</p>
+    <div class="cat-link" data-lang="cat_explore">Explore →</div>
+  </div>
+  <div class="cat-card" onclick="goToCategory('Physically Challenged')">
+    <div class="cat-icon-wrap" style="background:#ede9fe">♿</div>
+    <h3 data-lang="cat_disabled">Physically Challenged</h3>
+    <p data-lang="cat_disabled_desc">Assistance, Aids & Appliances, Education & more</p>
+    <div class="cat-link" data-lang="cat_explore">Explore →</div>
+  </div>
+  <div class="cat-card" onclick="goToCategory('Health & Wellness')">
+    <div class="cat-icon-wrap" style="background:#fee2e2">❤️</div>
+    <h3 data-lang="cat_health">Health & Wellness</h3>
+    <p data-lang="cat_health_desc">Health insurance, Treatment aid, Wellness programs & more</p>
+    <div class="cat-link" data-lang="cat_explore">Explore →</div>
+  </div>
+</div>
+</section>
+
+<section class="stats">
+  <div class="stat"><h3>100+</h3><p>Schemes Available</p></div>
+  <div class="stat"><h3>25+</h3><p>Departments</p></div>
+  <div class="stat"><h3>10L+</h3><p>Students Benefited</p></div>
+  <div class="stat"><h3>24/7</h3><p>Support</p></div>
+</section>
+
+<script src="js/main.js"></script>
+<script src="js/language.js"></script>
+<script>
+  window.addEventListener('load', initLanguage);
+  function goToCategory(cat) {
+  window.location.href = 'schemes.html?cat=' + encodeURIComponent(cat);
+}
+
+</script>
+</body>
+</html>

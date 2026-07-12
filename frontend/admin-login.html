@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login - cgsp</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #e8effe, #f5f8ff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 42px;
+      width: 420px;
+      box-shadow: 0 8px 40px rgba(15,37,87,0.13);
+      border: 1.5px solid #e1e8f5;
+    }
+    .admin-tag {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 1.5rem;
+      color: #0f2557;
+      margin-bottom: 6px;
+      font-weight: 800;
+    }
+    .sub {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 26px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #e1e8f5;
+      border-radius: 9px;
+      font-size: 0.93rem;
+      font-family: 'Segoe UI', sans-serif;
+      transition: border-color 0.18s;
+      color: #1e293b;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: #0f2557;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.18s;
+    }
+    .btn-login:hover { background: #2563eb; }
+    .err-msg {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+    .back-link a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+   
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <div class="admin-tag">🔐 Admin Portal</div>
+  <h2>Admin Login</h2>
+  <p class="sub">Sign in to manage government schemes</p>
+
+  <div class="err-msg" id="err-msg"></div>
+
+  <div class="form-group">
+    <label>Admin Email</label>
+    <input type="email" id="email" placeholder="enter admin email">
+  </div>
+
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter password">
+  </div>
+
+  <button class="btn-login" onclick="adminLogin()">🔐 Login as Admin</button>
+
+
+  <div class="back-link">
+    <a href="index.html">← Back to Public Portal</a>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+async function adminLogin() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const errEl = document.getElementById('err-msg');
+  errEl.style.display = 'none';
+
+   function adminlogout(){
+    if(confirm('Are you sure you want to logout')){
+      localStorage.removeItem('adminToken');
+      localStorage.removeItem('adminUser');
+      window.location.href='admin-login.html';
+    }
+  }
+
+  if (!email || !password) {
+    errEl.textContent = '⚠️ Please enter email and password';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    console.log('Trying login with:', email);
+
+    const res = await fetch(`${API}/auth/admin-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+    console.log('Response:', data);
+
+    if (!res.ok) {
+      errEl.textContent = '❌ ' + data.message;
+      errEl.style.display = 'block';
+      return;
+    }
+
+    localStorage.setItem('adminToken', data.token);
+    localStorage.setItem('adminUser', JSON.stringify(data.admin));
+
+    alert('✅ Login successful! Going to dashboard...');
+    window.location.href = 'admin-dashboard.html';
+
+  } catch (e) {
+    console.error('Error:', e);
+    errEl.textContent = '❌ Cannot connect to server. Is backend running on port 5000?';
+    errEl.style.display = 'block';
+  }
+}
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>

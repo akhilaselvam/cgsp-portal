@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eligibility Check - CGSP</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',sans-serif; background:#f5f8ff; color:#1e293b; }
+
+    /* LANGUAGE BAR */
+    .lang-bar {
+      background:#0f2557; padding:6px 48px;
+      display:flex; align-items:center;
+      justify-content:flex-end; gap:8px;
+    }
+    .lang-bar span { color:rgba(255,255,255,0.7); font-size:0.78rem; margin-right:6px; }
+    .lang-btn {
+      background:transparent; color:rgba(255,255,255,0.75);
+      border:1.5px solid rgba(255,255,255,0.25);
+      padding:4px 12px; border-radius:6px; font-size:0.78rem;
+      font-weight:600; cursor:pointer; transition:all 0.18s;
+    }
+    .lang-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+
+    /* NAV */
+    nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 48px; height:64px; background:#fff;
+      border-bottom:1.5px solid #e1e8f5; position:sticky; top:0; z-index:200;
+    }
+    .nav-brand { display:flex; align-items:center; gap:10px; cursor:pointer; }
+    .nav-icon { width:36px; height:36px; background:#0f2557; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .nav-links { display:flex; gap:6px; list-style:none; }
+    .nav-links a { padding:6px 13px; border-radius:7px; font-size:0.88rem; color:#64748b; text-decoration:none; font-weight:500; }
+    .nav-links a:hover, .nav-links a.active { color:#2563eb; background:#eff4ff; }
+    .btn-admin { background:#0f2557; color:#fff; padding:8px 22px; border-radius:8px; font-size:0.88rem; font-weight:600; text-decoration:none; }
+
+    /* HAMBURGER */
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:4px; }
+    .hamburger span { display:block; width:24px; height:2.5px; background:#0f2557; border-radius:3px; }
+    .mobile-menu { display:none; position:fixed; top:64px; left:0; right:0; background:#fff; border-bottom:1.5px solid #e1e8f5; padding:16px 24px; z-index:199; box-shadow:0 4px 20px rgba(0,0,0,0.1); flex-direction:column; gap:4px; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu a { padding:12px 16px; border-radius:8px; color:#1e293b; text-decoration:none; font-size:0.95rem; border-bottom:1px solid #f0f4ff; }
+    .mobile-menu .mob-admin { background:#0f2557; color:#fff; text-align:center; border-radius:8px; margin-top:8px; }
+
+    /* PAGE */
+    .elig-page { padding:40px 80px; max-width:950px; margin:auto; }
+    .elig-page h1 { font-size:1.7rem; color:#0f2557; font-weight:800; margin-bottom:6px; }
+    .elig-page > p { color:#64748b; margin-bottom:26px; font-size:0.92rem; }
+
+    /* CATEGORY SELECT */
+    .cat-label { font-size:0.92rem; font-weight:700; color:#0f2557; margin-bottom:14px; }
+    .cat-label span { color:#dc2626; }
+    .elig-cat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+    .elig-cat-card {
+      border:2px solid #e1e8f5; border-radius:12px;
+      padding:20px 14px; text-align:center;
+      cursor:pointer; transition:all 0.2s; background:#fff;
+      user-select:none;
+    }
+    .elig-cat-card:hover { border-color:#2563eb; background:#eff4ff; transform:translateY(-2px); }
+    .elig-cat-card.sel { border-color:#2563eb; background:#eff4ff; box-shadow:0 0 0 3px rgba(37,99,235,0.15); }
+    .elig-cat-card .eic { font-size:2rem; margin-bottom:8px; }
+    .elig-cat-card strong { display:block; font-size:0.9rem; color:#0f2557; margin-bottom:4px; }
+    .elig-cat-card span { font-size:0.76rem; color:#64748b; line-height:1.5; }
+
+    /* SELECTED INDICATOR */
+    .selected-cat-info {
+      background:#eff4ff; border:1.5px solid #bfdbfe;
+      border-radius:10px; padding:12px 18px;
+      margin-bottom:20px; font-size:0.9rem;
+      color:#1d4ed8; font-weight:600; display:none;
+    }
+
+    /* FORM SECTIONS */
+    .form-section {
+      background:#fff; border:1.5px solid #e1e8f5;
+      border-radius:14px; padding:24px; margin-bottom:18px;
+    }
+    .form-section-title {
+      font-size:0.92rem; font-weight:700; color:#0f2557;
+      margin-bottom:18px; padding-bottom:10px;
+      border-bottom:1px solid #e1e8f5;
+    }
+    .form-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
+    .form-row:last-child { margin-bottom:0; }
+    .form-group { display:flex; flex-direction:column; gap:5px; }
+    .form-group label { font-size:0.82rem; font-weight:600; color:#64748b; }
+    .form-group input, .form-group select {
+      padding:10px 13px; border:1.5px solid #e1e8f5;
+      border-radius:8px; font-size:0.88rem;
+      font-family:'Segoe UI',sans-serif; color:#1e293b;
+      transition:border-color 0.18s; background:#fff;
+    }
+    .form-group input:focus, .form-group select:focus {
+      outline:none; border-color:#2563eb;
+    }
+
+    /* ACTIONS */
+    .elig-actions { display:flex; gap:14px; margin-top:24px; }
+    .btn-primary {
+      background:#0f2557; color:#fff; padding:13px 28px;
+      border-radius:10px; border:none; cursor:pointer;
+      font-size:0.95rem; font-weight:700;
+      font-family:'Segoe UI',sans-serif; transition:all 0.18s;
+    }
+    .btn-primary:hover { background:#2563eb; }
+    .btn-primary:disabled { background:#94a3b8; cursor:not-allowed; }
+    .btn-outline {
+      background:transparent; color:#0f2557; padding:13px 28px;
+      border-radius:10px; border:2px solid #0f2557;
+      cursor:pointer; font-size:0.95rem; font-weight:700;
+      font-family:'Segoe UI',sans-serif; transition:all 0.18s;
+    }
+    .btn-outline:hover { background:#f0f4ff; }
+
+    .elig-note { font-size:0.8rem; color:#64748b; margin-top:16px; }
+
+    /* ERROR */
+    .error-msg {
+      background:#fee2e2; border:1px solid #fecaca;
+      color:#b91c1c; padding:10px 14px; border-radius:8px;
+      font-size:0.86rem; margin-bottom:16px; display:none;
+    }
+
+    /* MOBILE */
+    @media (max-width:768px) {
+      .lang-bar { padding:6px 16px; justify-content:center; }
+      nav { padding:0 16px; }
+      .nav-links, .btn-admin { display:none; }
+      .hamburger { display:flex; }
+      .elig-page { padding:20px 16px; }
+      .elig-cat-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+      .form-row { grid-template-columns:1fr; gap:12px; }
+      .elig-actions { flex-direction:column; }
+      .btn-primary, .btn-outline { width:100%; text-align:center; }
+    }
+    @media (max-width:480px) {
+      .elig-cat-grid { grid-template-columns:1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" onclick="setLang('en')">English</button>
+  <button class="lang-btn" onclick="setLang('te')">తెలుగు</button>
+  <button class="lang-btn" onclick="setLang('hi')">हिंदी</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="location.href='index.html'">
+    <div class="nav-icon">🏛️</div>
+    <div>
+      <div style="font-weight:700;color:#0f2557;font-size:0.95rem">CGSP</div>
+      <div style="font-size:0.68rem;color:#888">Centralized Government Schemes Portal</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="schemes.html">Schemes</a></li>
+    <li><a href="eligibility.html" class="active">Eligibility Check</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="admin-login.html" class="btn-admin">Admin Login</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">🏠 Home</a>
+  <a href="schemes.html">📋 Schemes</a>
+  <a href="eligibility.html">✅ Eligibility Check</a>
+  <a href="about.html">ℹ️ About Us</a>
+  <a href="contact.html">📞 Contact</a>
+  <a href="admin-login.html" class="mob-admin">🔐 Admin Login</a>
+</div>
+
+<div class="elig-page">
+  <h1>✅ Check Your Eligibility</h1>
+  <p>Fill in your details to find government schemes you are eligible for.</p>
+
+  <!-- STEP 1 SELECT CATEGORY -->
+  <div class="cat-label">
+    Step 1: Select Category <span>*</span>
+  </div>
+
+  <div class="elig-cat-grid">
+    <div class="elig-cat-card" id="cat-student" onclick="selectCat('Student', this)">
+      <div class="eic">🎓</div>
+      <strong>Student</strong>
+      <span>For students & education related schemes</span>
+    </div>
+    <div class="elig-cat-card" id="cat-agri" onclick="selectCat('Agriculture', this)">
+      <div class="eic">🌱</div>
+      <strong>Agriculture</strong>
+      <span>For farmers & agriculture related schemes</span>
+    </div>
+    <div class="elig-cat-card" id="cat-disabled" onclick="selectCat('Physically Challenged', this)">
+      <div class="eic">♿</div>
+      <strong>Physically Challenged</strong>
+      <span>For divyanjan welfare & empowerment</span>
+    </div>
+    <div class="elig-cat-card" id="cat-health" onclick="selectCat('Health & Wellness', this)">
+      <div class="eic">❤️</div>
+      <strong>Health & Wellness</strong>
+      <span>For health, nutrition & wellness schemes</span>
+    </div>
+  </div>
+
+  <!-- SELECTED INDICATOR -->
+  <div class="selected-cat-info" id="selected-info">
+    ✅ Category selected: <span id="selected-cat-name"></span>
+  </div>
+
+  <!-- ERROR MESSAGE -->
+  <div class="error-msg" id="error-msg"></div>
+
+  <!-- STEP 2 PERSONAL INFO -->
+  <div class="form-section">
+    <div class="form-section-title">👤 Step 2: Personal Information</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="e-name" placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" id="e-age" placeholder="Enter your age" min="1" max="100">
+      </div>
+      <div class="form-group">
+        <label>Gender</label>
+        <select id="e-gender">
+          <option value="">Select Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="tel" id="e-mobile" placeholder="Enter mobile number">
+      </div>
+      <div class="form-group">
+        <label>State</label>
+        <select id="e-state">
+          <option value="">Select State</option>
+          <option>Andhra Pradesh</option>
+          <option>Telangana</option>
+          <option>Tamil Nadu</option>
+          <option>Karnataka</option>
+          <option>Maharashtra</option>
+          <option>Delhi</option>
+          <option>Gujarat</option>
+          <option>Rajasthan</option>
+          <option>Uttar Pradesh</option>
+          <option>West Bengal</option>
+          <option>Bihar</option>
+          <option>Madhya Pradesh</option>
+          <option>Punjab</option>
+          <option>Haryana</option>
+          <option>Kerala</option>
+          <option>Odisha</option>
+          <option>Assam</option>
+          <option>Jharkhand</option>
+          <option>Uttarakhand</option>
+          <option>Himachal Pradesh</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>District</label>
+        <input type="text" id="e-district" placeholder="Enter your district">
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 FINANCIAL INFO -->
+  <div class="form-section">
+    <div class="form-section-title">💰 Step 3: Financial Information</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Annual Family Income (₹)</label>
+        <select id="e-income">
+          <option value="">Select income range</option>
+          <option value="below1">Below ₹1 Lakh</option>
+          <option value="1to2.5">₹1 Lakh – ₹2.5 Lakh</option>
+          <option value="2.5to5">₹2.5 Lakh – ₹5 Lakh</option>
+          <option value="above5">Above ₹5 Lakh</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Caste Category</label>
+        <select id="e-caste">
+          <option value="">Select category</option>
+          <option>General</option>
+          <option>OBC</option>
+          <option>SC</option>
+          <option>ST</option>
+          <option>EWS</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Occupation</label>
+        <select id="e-occupation">
+          <option value="">Select occupation</option>
+          <option>Student</option>
+          <option>Farmer</option>
+          <option>Self-employed</option>
+          <option>Salaried</option>
+          <option>Unemployed</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4 ADDITIONAL INFO -->
+  <div class="form-section">
+    <div class="form-section-title">📋 Step 4: Additional Information</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Course/Stream (if student)</label>
+        <select id="e-course">
+          <option value="">Select course</option>
+          <option>Engineering</option>
+          <option>Medical/MBBS</option>
+          <option>Arts</option>
+          <option>Commerce</option>
+          <option>Science</option>
+          <option>Law</option>
+          <option>Diploma</option>
+          <option>ITI</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Land Holding (if agriculture)</label>
+        <select id="e-land">
+          <option value="">Select land holding</option>
+          <option>Below 1 acre</option>
+          <option>1–2 acres</option>
+          <option>2–5 acres</option>
+          <option>Above 5 acres</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Disability Type (if applicable)</label>
+        <select id="e-disability">
+          <option value="">Select type</option>
+          <option>Visual Impairment</option>
+          <option>Hearing Impairment</option>
+          <option>Physical Disability</option>
+          <option>Intellectual Disability</option>
+          <option>Multiple Disabilities</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="elig-actions">
+    <button class="btn-primary" id="check-btn" onclick="checkEligibility()">
+      ✅ Check Eligibility
+    </button>
+    <button class="btn-outline" onclick="resetForm()">
+      🔄 Reset Form
+    </button>
+  </div>
+
+  <p class="elig-note">
+    🔒 Note: The information provided will be used only to find relevant schemes for you.
+  </p>
+</div>
+
+<script>
+const API = 'http://localhost:5000/api';
+let selectedCat = '';
+
+// SELECT CATEGORY
+function selectCat(cat, el) {
+  selectedCat = cat;
+
+  // Remove sel from all cards
+  document.querySelectorAll('.elig-cat-card').forEach(c => {
+    c.classList.remove('sel');
+  });
+
+  // Add sel to clicked card
+  el.classList.add('sel');
+
+  // Show selected info
+  document.getElementById('selected-info').style.display = 'block';
+  document.getElementById('selected-cat-name').textContent = cat;
+
+  // Hide error if shown
+  document.getElementById('error-msg').style.display = 'none';
+}
+
+// CHECK ELIGIBILITY
+async function checkEligibility() {
+  const errEl = document.getElementById('error-msg');
+  const btn = document.getElementById('check-btn');
+
+  errEl.style.display = 'none';
+
+  // Validate category selected
+  if (!selectedCat) {
+    errEl.textContent = '⚠️ Please select a category first by clicking one of the 4 cards above.';
+    errEl.style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  // Show loading
+  btn.textContent = '⏳ Checking...';
+  btn.disabled = true;
+
+  try {
+    // Fetch all schemes
+    const res = await fetch(API + '/schemes');
+
+    if (!res.ok) {
+      throw new Error('Server responded with error: ' + res.status);
+    }
+
+    const allSchemes = await res.json();
+
+    // Filter by selected category
+    const eligible = allSchemes.filter(s => {
+      return s.category.trim().toLowerCase() === selectedCat.trim().toLowerCase();
+    });
+
+    // Save to localStorage
+    localStorage.setItem('eligibilityResults', JSON.stringify({
+      eligible: eligible,
+      count: eligible.length,
+      category: selectedCat
+    }));
+
+    // Go to results page
+    window.location.href = 'eligibility-results.html';
+
+  } catch(err) {
+    errEl.textContent = '❌ Cannot connect to server. Please make sure backend is running on port 5000. Error: ' + err.message;
+    errEl.style.display = 'block';
+    btn.textContent = '✅ Check Eligibility';
+    btn.disabled = false;
+  }
+}
+
+// RESET FORM
+function resetForm() {
+  document.querySelectorAll('input, select').forEach(el => el.value = '');
+  document.querySelectorAll('.elig-cat-card').forEach(c => c.classList.remove('sel'));
+  document.getElementById('selected-info').style.display = 'none';
+  document.getElementById('error-msg').style.display = 'none';
+  document.getElementById('check-btn').textContent = '✅ Check Eligibility';
+  document.getElementById('check-btn').disabled = false;
+  selectedCat = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// HAMBURGER MENU
+function toggleMenu() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// LANGUAGE
+function setLang(lang) {
+  localStorage.setItem('cgsp_lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// Restore language on load
+window.onload = () => {
+  const lang = localStorage.getItem('cgsp_lang') || 'en';
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.textContent.trim() === (lang === 'en' ? 'English' : lang === 'te' ? 'తెలుగు' : 'हिंदी')) {
+      b.classList.add('active');
+    }
+  });
+};
+</script>
+</body>
+</html>

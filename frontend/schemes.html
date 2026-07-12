@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Schemes - cgsp</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="lang-bar">
+  <span>🌐 Language:</span>
+  <button class="lang-btn active" data-language="en" onclick="applyLanguage('en')">English</button>
+  <button class="lang-btn" data-language="te" onclick="applyLanguage('te')">తెలుగు</button>
+  <button class="lang-btn" data-language="hi" onclick="applyLanguage('hi')">हिंदी</button>
+</div>
+<nav>
+  <div class="nav-brand" onclick="location.href='index.html'">
+    <div class="nav-icon">🏛️</div>
+    <div>
+      <div style="font-weight:700;color:#0f2557;font-size:0.95rem">CGSP</div>
+      <div style="font-size:0.68rem;color:#888">Centralized Government Schemes Portal</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="schemes.html" class="active">Schemes</a></li>
+    <li><a href="eligibility.html">Eligibility Check</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="admin-login.html" class="btn-admin">Admin Login</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">🏠 Home</a>
+  <a href="schemes.html">📋 Schemes</a>
+  <a href="eligibility.html">✅ Eligibility Check</a>
+  <a href="about.html">ℹ️ About Us</a>
+  <a href="contact.html">📞 Contact</a>
+  <a href="admin-login.html" class="mob-admin" style="background:#0f2557;color:#fff;text-align:center;border-radius:8px;margin-top:8px">🔐 Admin Login</a>
+</div>
+<div class="schemes-page">
+  <h1 data-lang="schemes_title">All Government Schemes</h1>
+  <p style="color:#666;margin-bottom:16px">Browse all available schemes across different categories</p>
+<div class="cat-tabs-bar">
+  <button class="ctab active" onclick="filterSchemes('All',this)">All Categories</button>
+  <button class="ctab" onclick="filterSchemes('Student',this)">Student</button>
+  <button class="ctab" onclick="filterSchemes('Agriculture',this)">Agriculture</button>
+  <button class="ctab" onclick="filterSchemes('Physically Challenged',this)">Physically Challenged</button>
+  <button class="ctab" onclick="filterSchemes('Health & Wellness',this)">Health & Wellness</button>
+</div>
+  <div class="schemes-layout">
+    <div class="sidebar">
+      <h4>Categories</h4>
+    
+<ul class="s-sidebar-list" id="sidebar-cats">
+  <li class="active" onclick="filterSchemes('All',null)">All Categories</li>
+  <li onclick="filterSchemes('Student',null)">Student</li>
+  <li onclick="filterSchemes('Agriculture',null)">Agriculture</li>
+  <li onclick="filterSchemes('Physically Challenged',null)">Physically Challenged</li>
+  <li onclick="filterSchemes('Health & Wellness',null)">Health & Wellness</li>
+</ul>
+
+      <br>
+      <h4>Filters</h4>
+      <label style="font-size:0.8rem;color:#555">Department</label>
+      <select><option>All Departments</option></select>
+      <label style="font-size:0.8rem;color:#555">State</label>
+      <select><option>All States</option></select>
+      <button class="btn-outline" style="width:100%;margin-top:8px;padding:8px">Reset Filters</button>
+    </div>
+    <div>
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+   <input type="text"
+  id="schemes-search"
+  placeholder="Search schemes..."
+  oninput="loadSchemes()"
+  onkeypress="if(event.key==='Enter') loadSchemes()"
+  style="padding:10px 16px;border:1.5px solid #e1e8f5;
+  border-radius:9px;width:280px;font-size:0.9rem">
+      </div>
+      <div class="schemes-grid" id="schemes-grid">
+        <p>Loading schemes...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/schemes.js"></script>
+<script>
+// HAMBURGER FIX FOR SCHEMES PAGE
+function toggleMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu) menu.classList.toggle('open');
+  if (hamburger) hamburger.classList.toggle('open');
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobile-menu');
+  const hamburger = document.getElementById('hamburger');
+  if (menu && hamburger) {
+    if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+      menu.classList.remove('open');
+      hamburger.classList.remove('open');
+    }
+  }
+});
+</script>
+<script src="js/main.js"></script>
+<script src="js/language.js"></script>
+<script>
+  window.addEventListener('load', initLanguage);
+</script>
+</body>
+</html>
