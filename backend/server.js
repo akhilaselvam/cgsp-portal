@@ -34,7 +34,7 @@ try {
   console.log('✅ Eligibility routes loaded');
 } catch(e) { console.error('❌ Eligibility routes failed:', e.message); }
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
 });
