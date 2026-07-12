@@ -1,4 +1,4 @@
-const API = 'http://localhost:5000/api';
+const API = 'https://cgsp-backend.onrender.com/api';
 
 // Update nav login button based on auth
 window.onload = () => {
