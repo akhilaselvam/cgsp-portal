@@ -1,4 +1,4 @@
-const API = 'https://cgsp-backend.onrender.com/api';
+const API = 'https://cgsp-portal.onrender.com/api';
 let currentCat = 'All';
 
 const BADGE = {
