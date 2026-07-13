@@ -10,14 +10,23 @@ exports.checkEligibility = async (req, res) => {
       params.push(category);
     }
     const [schemes] = await db.query(query, params);
-    if (req.user) {
-      await db.query(
-        'INSERT INTO eligibility_checks (user_id, category) VALUES (?, ?)',
-        [req.user.id, category]
-      );
+
+    // Only save check if user is logged in
+    if (req.user && req.user.id) {
+      try {
+        await db.query(
+          'INSERT INTO eligibility_checks (user_id, category) VALUES (?, ?)',
+          [req.user.id, category]
+        );
+      } catch (insertErr) {
+        // Ignore insert error - don't fail the whole request
+        console.log('Check save skipped:', insertErr.message);
+      }
     }
+
     res.json({ eligible: schemes, count: schemes.length });
   } catch (err) {
+    console.error('Eligibility error:', err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
